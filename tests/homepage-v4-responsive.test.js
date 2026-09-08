@@ -141,7 +141,8 @@ test('mobile announcement restores full text in a slow seamless loop', () => {
   assert.match(html, /prefers-reduced-motion:reduce[\s\S]*?\.announce__marquee\{animation:none!important;transform:none!important\}/);
 });
 
-test('stacking section scroll remains enabled on mobile', () => {
-  assert.match(html, /root\.classList\.toggle\('no-stack', !canZoom\)/);
+test('stacking section scroll remains enabled on mobile without CSS zoom support', () => {
+  assert.match(html, /root\.classList\.toggle\('no-stack', !canZoom && !fluid\)/);
+  assert.match(html, /if \(!canZoom && !fluid\)\{[\s\S]*?stage\.style\.transform = 'scale\('/);
   assert.doesNotMatch(html, /w < STACK_ABOVE/);
 });

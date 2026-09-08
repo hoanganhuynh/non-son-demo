@@ -1362,18 +1362,24 @@ html.fluid .mood__img img{position:absolute;left:50%;top:50%;transform:translate
     var root  = document.documentElement;
 
     root.classList.toggle('fluid', fluid);
-    root.classList.toggle('no-stack', !canZoom);
+    // Mobile dùng layout fluid, không cần CSS zoom; giữ sticky stacking kể
+    // cả trên Safari/iOS, nơi CSS zoom không được hỗ trợ.
+    root.classList.toggle('no-stack', !canZoom && !fluid);
 
-    if (!canZoom){                       // dự phòng: scale, không stacking
+    if (!canZoom && !fluid){             // dự phòng desktop: scale, không stacking
       stage.style.transform = 'scale(' + (w / 1600) + ')';
       stage.style.position  = 'absolute';
       document.body.style.height = Math.round(stage.offsetHeight * (w / 1600)) + 'px';
       return;
     }
 
+    stage.style.transform = '';
+    stage.style.position = '';
+    document.body.style.height = '';
+
     // fluid: zoom = 1 (CSS lo phần còn lại). canvas: thu phóng khung 1600px.
     var z = fluid ? 1 : w / 1600;
-    if (!fluid) stage.style.zoom = z;
+    stage.style.zoom = fluid ? '' : z;
 
     if (root.classList.contains('no-stack')){
       panels.forEach(function(p){ p.style.top = ''; p.style.zIndex = ''; p.style.minHeight = ''; });
