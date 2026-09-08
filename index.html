@@ -812,7 +812,8 @@ html.fluid .mood__img img{position:absolute;left:50%;top:50%;transform:translate
   html.fluid .mood__p{font-size:14px;margin-top:8px}
   html.fluid .band__btn,html.fluid .mood__btn2{width:100%}
   html.fluid .mood__btn2{min-height:48px;padding:13px 16px;margin-top:16px}
-  html.fluid .foot__top{grid-template-columns:1fr;gap:28px}
+  html.fluid .foot__top{grid-template-columns:repeat(2,minmax(0,1fr));gap:28px 18px}
+  html.fluid .foot__brand{grid-column:1/-1}
   html.fluid .foot__bot{flex-direction:column;align-items:flex-start;gap:14px}
   html.fluid .foot__end{width:100%;justify-content:space-between}
   html.fluid .foot__end span{white-space:normal}

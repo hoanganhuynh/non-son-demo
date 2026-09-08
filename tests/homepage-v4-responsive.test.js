@@ -129,6 +129,11 @@ test('mobile mood content keeps breathing room above its CTA', () => {
   assert.match(html, /\.mood__btn2\{min-height:48px;padding:13px 16px;margin-top:16px\}/);
 });
 
+test('mobile footer keeps its navigation groups in two columns below the brand', () => {
+  assert.match(html, /@media \(max-width:768px\)[\s\S]*?html\.fluid \.foot__top\{grid-template-columns:repeat\(2,minmax\(0,1fr\)\);gap:28px 18px\}/);
+  assert.match(html, /@media \(max-width:768px\)[\s\S]*?html\.fluid \.foot__brand\{grid-column:1\/-1\}/);
+});
+
 test('mobile announcement restores full text in a slow seamless loop', () => {
   assert.equal((html.match(/class="announce__copy"/g) || []).length, 2);
   assert.match(html, /\.announce__marquee\{display:flex;width:max-content;animation:announce-scroll 20s linear infinite\}/);
