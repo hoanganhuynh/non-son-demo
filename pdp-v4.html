@@ -56,12 +56,16 @@ main{padding-top:9px}   /* Figma: header cao 78, Main bắt đầu ở y=87 */
 
 /* ───────── Gallery + Info (20:13675) ───────── */
 .pdp{display:flex;gap:15px;align-items:flex-start;justify-content:center;padding:0 128px 144px}
-.gallery{width:937px;flex:none;display:flex;flex-direction:column;gap:16px;align-items:center;overflow:hidden}
+.gallery{position:relative;width:937px;flex:none;display:flex;flex-direction:column;gap:16px;align-items:center}
 .gallery__stage{position:relative;width:937px;height:784px;overflow:hidden}
 /* con trực tiếp: nếu để selector hậu duệ thì nó bắt luôn <img> icon bên
    trong nút 3D và đẩy icon ra khỏi pill */
 .gallery__stage>img{position:absolute;height:119.52%;left:-.03%;top:-9.77%;width:100%}
-.pill3d{position:absolute;left:calc(50% + .26px);transform:translateX(-50%);top:685.6px;
+/* Ảnh model view khổ ngang (744x572), khác ảnh sản phẩm vuông nên cho
+   contain trong khung thay vì dùng khung hình vuông của ảnh sản phẩm. */
+.gallery__stage>img.is-model{height:100%;width:100%;top:0;left:0;object-fit:contain;padding:24px}
+.pill3d{position:absolute;z-index:4;left:calc(50% + .26px);transform:translateX(-50%);top:685.6px;
+  border:0;
   background:rgba(0,0,0,.08);padding:12px 16px;border-radius:99px;display:flex;align-items:center;gap:10px;
   transition:background-color .22s ease}
 .pill3d:hover{background:rgba(0,0,0,.16)}
@@ -257,18 +261,24 @@ html.has-cursor,html.has-cursor *{cursor:none!important}
   display:none;z-index:2;touch-action:pan-y}
 .v3d.on{display:block}
 .v3d canvas{width:100%;height:100%;display:block}
-.v3d__hint{position:absolute;left:50%;bottom:14%;transform:translateX(-50%);
-  display:flex;align-items:center;gap:8px;padding:9px 15px;border-radius:99px;
-  background:rgba(0,0,0,.08);font-size:12px;letter-spacing:1.2px;text-transform:uppercase;color:#111;
-  white-space:nowrap;transition:opacity .3s ease}
-.v3d__hint.gone{opacity:0}
+.v3d__hint{position:absolute;left:50%;top:26px;transform:translateX(-50%);z-index:3;
+  font-size:12px;letter-spacing:1.6px;text-transform:uppercase;color:#766f67;
+  white-space:nowrap;pointer-events:none;opacity:0;transition:opacity .35s ease}
+.gallery__stage.is3d .v3d__hint{opacity:1}
 .v3d__load{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
-  flex-direction:column;gap:12px;font-size:12px;letter-spacing:1.4px;text-transform:uppercase;color:#766f67}
+  flex-direction:column;gap:12px;font-size:12px;letter-spacing:1.4px;text-transform:uppercase;color:#766f67;
+  pointer-events:none}
+/* display:flex ở trên đè mất display:none mặc định của [hidden] — phải khai lại,
+   nếu không lớp tải sẽ nằm đè lên canvas và chặn thao tác kéo */
+.v3d__load[hidden]{display:none}
 .v3d__bar{width:132px;height:2px;background:rgba(18,18,18,.12);overflow:hidden}
 .v3d__bar i{display:block;height:100%;width:0;background:#d11f70;transition:width .18s linear}
-.pill3d.on{background:#121212}
-.pill3d.on span{color:#f4f1ea}
-.pill3d.on img{filter:brightness(0) invert(1)}
+/* Đang bật 3D: nút vẫn còn đó, đổi sang nền hồng nhạt + chữ/icon hồng
+   thương hiệu. Icon là <img> nên không nhuộm được bằng currentColor —
+   dùng bản SVG hồng riêng, JS đổi src khi bật/tắt. */
+.pill3d.on{background:#ffe4f1}
+.pill3d.on span{color:#d11f70}
+.pill3d.on:hover{background:#fbd3e7}
 
 /* ══ Popup: sản phẩm chưa có 3D ══ */
 .modal[hidden]{display:none}
@@ -298,6 +308,73 @@ html.has-cursor,html.has-cursor *{cursor:none!important}
   color:#766f67;transition:color .22s ease}
 .modal__later:hover{color:#121212}
 
+/* ══ Thanh mua cố định ở đáy (chỉ mobile) ══
+   Hiện khi đã cuộn qua khỏi khối nút mua trong trang, để nút "Thêm vào giỏ"
+   luôn trong tầm tay. Không dùng thuộc tính [hidden] vì display ở đây sẽ đè
+   mất display:none của nó — dùng transform để trượt ra/vào.                */
+.buybar{position:fixed;left:0;right:0;bottom:0;z-index:300;display:none;align-items:center;gap:12px;
+  padding:10px 20px calc(10px + env(safe-area-inset-bottom,0px));
+  background:rgba(251,250,247,.97);backdrop-filter:blur(14px) saturate(1.3);
+  border-top:1px solid rgba(18,18,18,.12);box-shadow:0 -10px 30px -22px rgba(18,18,18,.5);
+  transform:translateY(110%);transition:transform .34s cubic-bezier(.22,.9,.24,1)}
+.buybar.on{transform:none}
+.buybar__info{flex:1 1 auto;min-width:0;display:flex;flex-direction:column;gap:2px}
+.buybar__name{font-size:11px;color:#766f67;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.buybar__price{font-weight:600;font-size:15px;color:#d11f70;line-height:1.2}
+.buybar__add{flex:0 0 auto;min-height:46px;padding:0 20px;display:flex;align-items:center;gap:8px;
+  background:#d11f70;color:#f4f1ea;font-weight:600;font-size:12px;letter-spacing:1.4px;
+  text-transform:uppercase;white-space:nowrap;transition:background-color .22s ease}
+.buybar__add:hover{background:#b0155c}
+.buybar__add img{width:13.56px;height:12px;transform:scaleY(-1)}
+.buybar__add[data-added]{background:#50734e}
+@media (max-width:768px){
+  html.fluid .buybar{display:flex}
+  html.fluid #stage{padding-bottom:70px}   /* chừa chỗ, khỏi che footer */
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   SCROLL DẠNG STACKING (như trang chủ) — 3 nhóm:
+     1. ảnh sản phẩm + thông tin sản phẩm
+     2. câu chuyện chế tác + điểm đáng chú ý
+     3. thông tin sản phẩm → footer
+   Nhóm nào cao hơn khung nhìn thì JS gán top âm để chạy hết nội dung
+   rồi mới ghim. Tắt dưới 768px (panel cao gấp nhiều lần màn hình).
+   ══════════════════════════════════════════════════════════════════ */
+.panel{position:sticky;top:0}
+.panel[data-panel="1"]{background:#fbfaf7}
+.panel[data-panel="2"]{background:#fbfaf7}
+.panel[data-panel="3"]{background:#f2f2f2}
+.no-stack .panel{position:static}
+
+
+/* ══ Mobile navigation ══ dùng chung y hệt trang chủ (dialog native) ══ */
+.menuicon{width:17px;height:13px;display:flex;flex-direction:column;justify-content:space-between}
+.menuicon i{display:block;width:100%;height:1.5px;background:currentColor;border-radius:2px;transition:transform .22s ease}
+.menubtn{display:none;color:#121212}
+.mobile-menu{border:0;margin:0;width:100%;max-width:none;height:100dvh;max-height:none;padding:0;
+  color:#121212;background:#fbfaf7;overflow:auto}
+.mobile-menu[open]{display:flex;flex-direction:column}
+.mobile-menu::backdrop{background:rgba(18,18,18,.6);backdrop-filter:blur(4px)}
+.mobile-menu__head{min-height:72px;padding:18px 24px;display:flex;align-items:center;justify-content:space-between}
+.mobile-menu__logo{width:96px;height:auto}
+.mobile-menu__close{width:40px;height:40px;border:0;border-radius:999px;display:flex;align-items:center;
+  justify-content:center;color:#766f67;transition:background-color .22s ease,color .22s ease}
+.mobile-menu__close:hover{background:rgba(18,18,18,.06);color:#121212}
+.mobile-menu__close svg{width:17px;height:17px;stroke:currentColor;stroke-width:1.6;fill:none}
+.mobile-menu__title{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.mobile-menu__nav{padding:14px 24px 40px;display:flex;flex-direction:column}
+.mobile-menu__nav a{padding:17px 0;font-family:Newsreader,Georgia,serif;font-size:30px;line-height:1.15;
+  color:#121212;border-bottom:1px solid rgba(18,18,18,.08);transition:color .22s ease}
+.mobile-menu__nav a:last-of-type{border-bottom:0}
+.mobile-menu__nav a:hover{color:#d11f70}
+.mobile-menu__foot{margin-top:auto;padding:0 24px 34px;font-size:10px;letter-spacing:1.6px;
+  text-transform:uppercase;color:#766f67}
+.menubtn:focus-visible,.mobile-menu :focus-visible{outline:2px solid #d11f70;outline-offset:3px}
+html.menu-open{overflow:hidden}
+@media (max-width:768px){
+  html.fluid .menubtn{display:flex}
+}
+
 /* ══════════════════════════════════════════════════════════════════
    RESPONSIVE — giống trang chủ: ≥1201px giữ khung 1920 và zoom;
    ≤1200px chuyển html.fluid, layout co giãn thật (1200·1024·768·480)
@@ -313,6 +390,10 @@ html.fluid .pdp{padding:0 var(--pad) 88px;gap:32px}
 html.fluid .gallery{width:auto;flex:1 1 52%;min-width:0}
 html.fluid .gallery__stage{width:100%;height:auto;aspect-ratio:937/784}
 html.fluid .pill3d{top:auto;bottom:16px}
+@media (max-width:768px){
+  /* nút 3D thôi đè lên ảnh — cho về flow, nằm giữa ảnh và nút chuyển chế độ xem */
+  html.fluid .pill3d{position:static;transform:none;bottom:auto;align-self:center}
+}
 html.fluid .info{width:auto;flex:1 1 44%;min-width:0;padding-top:0}
 html.fluid .info__h1{font-size:clamp(34px,4.4vw,64px)}
 html.fluid .info__tagline{font-size:clamp(20px,2.4vw,28px);line-height:1.15}
@@ -320,7 +401,10 @@ html.fluid .trustcards div{width:auto;flex:1 1 0;min-width:0}
 html.fluid .trustcards span,html.fluid .trustline{white-space:normal}
 html.fluid .editorial{flex-direction:column}
 html.fluid .editorial__media{width:100%;flex:none;height:min(52vw,520px);min-height:0}
-html.fluid .editorial__quote{left:auto;right:6%;top:auto;bottom:24px;transform:none;width:min(46%,320px);font-size:clamp(18px,2.2vw,28px)}
+html.fluid .editorial__media::after{content:'';position:absolute;left:0;right:0;bottom:0;height:52%;
+  z-index:2;pointer-events:none;background:linear-gradient(to top,rgba(10,6,8,.82),rgba(10,6,8,0))}
+html.fluid .editorial__quote{position:absolute;z-index:3;left:var(--pad);right:var(--pad);
+  top:auto;bottom:22px;transform:none;width:auto;color:#f4f1ea;font-size:clamp(19px,2.8vw,30px)}
 html.fluid .editorial__panel{width:100%;height:auto;flex:none;padding:72px var(--pad);gap:48px}
 html.fluid .editorial__panel h2{font-size:clamp(30px,4.4vw,52px)}
 html.fluid .hl,html.fluid .specs{padding:88px var(--pad)}
@@ -349,26 +433,44 @@ html.fluid .foot__top{height:auto}
   html.fluid .hl__grid{flex-wrap:wrap;gap:32px 16px}
   html.fluid .hl__item{flex:1 1 44%}
   html.fluid .specs{grid-template-columns:1fr;gap:40px}
-  html.fluid .editorial__quote{position:static;width:auto;padding:20px var(--pad);color:#f4f1ea;background:#121212}
   html.fluid .sizeband{flex-direction:column;align-items:flex-start;gap:20px}
   html.fluid .sizeband p{max-width:none;padding-right:0}
   html.fluid .foot__top{grid-template-columns:1fr 1fr}
 }
 @media (max-width:768px){
-  html.fluid .hl__item{flex:1 1 100%}
+  /* Ở desktop hai cột nằm cạnh nhau nên padding-bottom của cột trái không
+     lộ ra; xếp dọc trên mobile thì nó cộng với gap lưới và padding hàng
+     đầu thành ~83px khoảng trống. Rút gọn lại cho đều nhịp. */
+  html.fluid .hl,html.fluid .specs{padding:64px var(--pad)}
+  html.fluid .hl{gap:36px}
+  html.fluid .specs{gap:24px}
+  html.fluid .specs__l{padding-bottom:0;gap:16px}
+  html.fluid .editorial__panel{padding:56px var(--pad);gap:36px}
+  html.fluid .hl__item{flex:1 1 100%;display:grid;grid-template-columns:auto 1fr;
+    gap:10px 14px;align-items:center;padding-top:26px}
+  html.fluid .hl__icon{width:34px;height:34px}
+  html.fluid .hl__icon .i-leather{width:34.6px;height:25.5px;left:-.3px;top:4.2px}
+  html.fluid .hl__icon .i-shape{width:30.5px;height:26.4px;left:1.7px;top:5.7px}
+  html.fluid .hl__icon .i-size{width:34px;height:34px}
+  html.fluid .hl__item h3{padding-top:0;font-size:23px;line-height:1.22}
+  html.fluid .hl__item p{grid-column:1/-1}
+  html.fluid .hl__head p br{display:none}   /* để đoạn văn tự xuống dòng, khỏi ngắt cứng */
   html.fluid .specs__row{flex-direction:column;gap:8px}
   html.fluid .specs__term{width:auto;margin-right:0}
   html.fluid .trustcards{flex-wrap:wrap}
   html.fluid .trustcards div{flex:1 1 45%}
-  html.fluid .foot__top{grid-template-columns:1fr;gap:28px}
+  html.fluid .foot__top{grid-template-columns:1fr 1fr;gap:28px}
+  html.fluid .foot__brand{grid-column:1/-1}
   html.fluid .foot__bot{flex-direction:column;align-items:flex-start;gap:14px}
   html.fluid .foot__brand p{width:auto;max-width:none}
   html.fluid .hd__nav{display:none}
+  html.fluid .hd__act{margin-left:auto}   /* nav ẩn rồi thì act phải tự dạt sang phải */
 }
 @media (max-width:480px){
   html.fluid .cta{flex-wrap:wrap}
-  html.fluid .cta__add,html.fluid .cta__buy{flex:1 1 100%}
-  html.fluid .cta__wish{width:100%}
+  html.fluid .cta__add{flex:1 1 100%}
+  html.fluid .cta__buy{flex:1 1 auto}
+  html.fluid .cta__wish{width:53.59px;flex:none}
   html.fluid .trustcards div{flex:1 1 100%}
   html.fluid .viewtoggle button{padding:9px 10px;font-size:13px;letter-spacing:1px}
 }
@@ -380,20 +482,26 @@ html.fluid .foot__top{height:auto}
 <!-- Sticky header -->
 <header class="stickyhd" id="stickyHd">
   <a class="stickyhd__logo" href="homepage-v4.html" aria-label="Nón Sơn"><img src="img-v4/logo-nonson.png" alt="Nón Sơn"></a>
-  <nav class="stickyhd__nav"><a href="#">Danh mục</a><a href="#">Bán chạy</a><a href="#">Câu chuyện</a><a href="#">Trợ giúp</a></nav>
+  <nav class="stickyhd__nav"><a href="homepage-v4.html#moi">Bộ sưu tập</a><a href="homepage-v4.html#worlds">Di sản</a><a href="homepage-v4.html#tapchi">Tạp chí</a><a href="homepage-v4.html#privilege">Đặc quyền</a></nav>
   <div class="stickyhd__act">
     <button class="iconbtn" aria-label="Tìm kiếm"><img src="img-v4/ic-search.svg" alt=""></button>
     <button class="iconbtn" aria-label="Mở giỏ hàng"><img src="img-v4/ic-cart.svg" alt=""><span class="cnt">2</span></button>
+    <button class="iconbtn menubtn" type="button" aria-label="Mở menu" aria-controls="mobileMenu" aria-expanded="false">
+      <span class="menuicon" aria-hidden="true"><i></i><i></i><i></i></span>
+    </button>
   </div>
 </header>
 
 <!-- ══ Header · 199:4836 ══ -->
 <header class="hd">
   <a class="hd__logo" href="homepage-v4.html" aria-label="Nón Sơn"><img src="img-v4/logo-nonson.png" alt="Nón Sơn"></a>
-  <nav class="hd__nav"><a href="#">Danh mục</a><a href="#">Bán chạy</a><a href="#">Câu chuyện</a><a href="#">Trợ giúp</a></nav>
+  <nav class="hd__nav"><a href="homepage-v4.html#moi">Bộ sưu tập</a><a href="homepage-v4.html#worlds">Di sản</a><a href="homepage-v4.html#tapchi">Tạp chí</a><a href="homepage-v4.html#privilege">Đặc quyền</a></nav>
   <div class="hd__act">
     <button class="iconbtn" aria-label="Tìm kiếm"><img src="img-v4/ic-search.svg" alt=""></button>
     <button class="iconbtn" aria-label="Mở giỏ hàng"><img src="img-v4/ic-cart.svg" alt=""><span class="cnt">2</span></button>
+    <button class="iconbtn menubtn" type="button" aria-label="Mở menu" aria-controls="mobileMenu" aria-expanded="false">
+      <span class="menuicon" aria-hidden="true"><i></i><i></i><i></i></span>
+    </button>
   </div>
 </header>
 
@@ -408,17 +516,18 @@ html.fluid .foot__top{height:auto}
 </nav>
 
 <!-- ══ Gallery + Info · 20:13675 ══ -->
+<div class="panel" data-panel="1">
 <section class="pdp">
   <div class="gallery">
     <div class="gallery__stage">
       <img src="img-pdp/hero-hat.png" alt="Nón Phớt Da Cừu Heritage">
       <div class="v3d" id="v3d">
         <canvas id="v3dCanvas" width="640" height="640"></canvas>
-        <div class="v3d__hint" id="v3dHint">↔ Kéo ngang để xoay</div>
         <div class="v3d__load" id="v3dLoad" hidden>Đang tải bản 3D<div class="v3d__bar"><i id="v3dBar"></i></div></div>
       </div>
-      <button class="pill3d" id="btn3d"><img src="img-pdp/ic-3d.svg" alt=""><span>3D view</span></button>
+      <div class="v3d__hint" id="v3dHint">Kéo trái/phải để xem</div>
     </div>
+    <button class="pill3d" id="btn3d"><img src="img-pdp/ic-3d.svg" alt=""><span>3D view</span></button>
     <div class="viewtoggle">
       <button aria-pressed="false">Model view</button>
       <button aria-pressed="true">Product view</button>
@@ -479,6 +588,9 @@ html.fluid .foot__top{height:auto}
   </aside>
 </section>
 
+</div><!-- /panel 1 -->
+
+<div class="panel" data-panel="2">
 <!-- ══ Editorial · 20:13801 ══ -->
 <section class="editorial">
   <div class="editorial__media">
@@ -494,7 +606,7 @@ html.fluid .foot__top{height:auto}
     </div>
     <div class="editorial__code">
       <b>P2DA</b>
-      <span>mã sản phẩm<br>Heritage collection</span>
+      <span>mã sản phẩm <br>Heritage collection</span>
     </div>
   </div>
 </section>
@@ -504,9 +616,9 @@ html.fluid .foot__top{height:auto}
   <div class="hl__head">
     <div class="l">
       <div class="eyebrow-gold">Điểm đáng chú ý</div>
-      <h2 class="ns">Một chiếc nón tốt<br>bắt đầu từ những chi tiết đúng.</h2>
+      <h2 class="ns">Một chiếc nón tốt <br>bắt đầu từ những chi tiết đúng.</h2>
     </div>
-    <p>Từ cảm hứng đầu tiên đến quyết định mua, mọi thông tin quan<br>trọng đều được đặt đúng lúc và nói bằng ngôn ngữ dễ hiểu.</p>
+    <p>Từ cảm hứng đầu tiên đến quyết định mua, mọi thông tin quan <br>trọng đều được đặt đúng lúc và nói bằng ngôn ngữ dễ hiểu.</p>
   </div>
   <div class="hl__grid">
     <article class="hl__item">
@@ -527,11 +639,15 @@ html.fluid .foot__top{height:auto}
   </div>
 </section>
 
+</div><!-- /panel 2 -->
+</main>
+
+<div class="panel" data-panel="3">
 <!-- ══ Thông tin sản phẩm · 20:13854 ══ -->
 <section class="specs">
   <div class="specs__l">
     <div class="eyebrow-gold">Thông tin sản phẩm</div>
-    <h2 class="ns">Biết rõ điều<br>mình đang chọn.</h2>
+    <h2 class="ns">Biết rõ điều <br>mình đang chọn.</h2>
     <p>Mã P2DA-NU2 được giữ để đồng bộ kho và showroom; tên Heritage giúp bạn dễ nhận biết và ghi nhớ sản phẩm.</p>
   </div>
   <dl class="specs__list">
@@ -564,7 +680,6 @@ html.fluid .foot__top{height:auto}
   <p>Gửi số đo vòng đầu qua Zalo OA hoặc ghé showroom gần nhất. Đội ngũ Nón Sơn sẽ giúp bạn chọn đúng phom trước khi mua.</p>
   <a href="#">Tư vấn chọn size&nbsp;<img src="img-pdp/ic-arrow-white.svg" alt=""></a>
 </section>
-</main>
 
 <!-- ══ Footer ══ -->
 <footer class="foot">
@@ -589,13 +704,39 @@ html.fluid .foot__top{height:auto}
   <div class="foot__bot">
     <span>© 2026 Nón Sơn</span>
     <div class="foot__end">
-      <span>Chính hãng · Được chăm sóc · Made in Vietnam</span>
+      <span>Chính hãng · Được chăm sóc · Proudly Made in Vietnam</span>
       <button class="totop" id="toTop" aria-label="Về đầu trang" title="Về đầu trang">
         <svg viewBox="0 0 24 24"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
       </button>
     </div>
   </div>
 </footer>
+</div><!-- /panel 3 -->
+
+<dialog class="mobile-menu" id="mobileMenu" aria-labelledby="mobileMenuTitle">
+  <div class="mobile-menu__head">
+    <img class="mobile-menu__logo" src="img-v4/logo-nonson.png" alt="Nón Sơn">
+    <h2 class="mobile-menu__title" id="mobileMenuTitle">Menu chính</h2>
+    <button class="mobile-menu__close" type="button" aria-label="Đóng menu">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+  </div>
+  <nav class="mobile-menu__nav" aria-label="Điều hướng mobile">
+    <a href="homepage-v4.html#moi">Bộ sưu tập</a>
+    <a href="homepage-v4.html#worlds">Di sản</a>
+    <a href="homepage-v4.html#tapchi">Tạp chí</a>
+    <a href="homepage-v4.html#privilege">Đặc quyền</a>
+  </nav>
+  <p class="mobile-menu__foot">Nón Sơn · Proudly Made in Vietnam</p>
+</dialog>
+
+<div class="buybar" id="buybar">
+  <div class="buybar__info">
+    <span class="buybar__name" id="buybarName"></span>
+    <b class="buybar__price" id="buybarPrice"></b>
+  </div>
+  <button class="buybar__add" id="buybarAdd">Thêm vào giỏ<img src="img-pdp/ic-cart.svg" alt=""></button>
+</div>
 
 <!-- Popup: sản phẩm chưa có bản 3D -->
 <div class="modal" id="no3d" hidden>
@@ -627,7 +768,7 @@ window.NS_PRODUCTS = {
     cat:'Nón phớt · Da cừu cao cấp', crumbCat:'Nón da',
     name:'Nón Phớt Da Cừu Heritage', sku:'P2DA-NU2', variant:'Nâu',
     price:'10.000.000đ', img:'img-pdp/hero-hat.png', code:'P2DA',
-    frames3d:{ dir:'img-pdp/3d/', count:97 },
+    frames3d:{ dir:'3d-sequence-prod/', count:97 }, model:'img-pdp/model-view.png',
     colors:[['#765500','Màu nâu'],['#737373','Màu xám'],['#111','Màu đen']],
     tagline:'Một phom dáng kinh điển được kể lại bằng <em>da cừu</em> mềm và sắc nâu trầm.',
     desc:'Nón phớt Heritage dành cho những nhịp xuất hiện cần sự chỉn chu, với bề mặt da tạo cảm giác sang trọng và dễ phối.',
@@ -803,6 +944,7 @@ window.NS_PRODUCTS = {
    transform: scale — nhờ đó position:sticky của cột thông tin chạy đúng. */
 (function(){
   var stage = document.getElementById('stage');
+  var panels = [].slice.call(stage.querySelectorAll('.panel'));
   var canZoom = window.CSS && CSS.supports && CSS.supports('zoom', '0.5');
   var FLUID_BELOW = 1201;
 
@@ -819,6 +961,21 @@ window.NS_PRODUCTS = {
       return;
     }
     if (!fluid) stage.style.zoom = w / 1920;
+
+    /* stacking: tắt dưới 768px */
+    var noStack = w < 768;
+    document.documentElement.classList.toggle('no-stack', noStack);
+    var z = fluid ? 1 : w / 1920;
+    if (noStack){
+      panels.forEach(function(p){ p.style.top = ''; p.style.zIndex = ''; });
+      return;
+    }
+    var vh = window.innerHeight / z;
+    panels.forEach(function(p, i){
+      var h = p.getBoundingClientRect().height / z;
+      p.style.top = (h > vh ? Math.round(vh - h) : 0) + 'px';
+      p.style.zIndex = i + 1;
+    });
   }
 
   var hd = document.getElementById('stickyHd');
@@ -864,21 +1021,44 @@ window.NS_PRODUCTS = {
   var top = document.getElementById('toTop');
   if (top) top.addEventListener('click', function(){ window.scrollTo({ top: 0, behavior: 'smooth' }); });
 
-  /* badge giỏ hàng +1, chỉ một lần */
+  /* badge giỏ hàng +1, chỉ một lần — nút trong trang và nút ở thanh đáy
+     dùng chung một trạng thái, bấm cái nào cũng chỉ cộng đúng một lần */
   var badges = [].slice.call(document.querySelectorAll('.cnt'));
-  var add = document.getElementById('addToCart');
-  if (add && badges.length){
+  var adds = [document.getElementById('addToCart'), document.getElementById('buybarAdd')].filter(Boolean);
+  if (adds.length && badges.length){
     var n = parseInt(badges[0].textContent, 10) || 0;
-    add.addEventListener('click', function(){
-      if (add.dataset.added) return;
-      add.dataset.added = '1';
-      n++;
-      badges.forEach(function(b){
-        b.textContent = n;
-        b.classList.add('pop');
-        setTimeout(function(){ b.classList.remove('pop'); }, 380);
+    var added = false;
+    adds.forEach(function(btn){
+      btn.addEventListener('click', function(){
+        if (added) return;
+        added = true;
+        adds.forEach(function(b){ b.dataset.added = '1'; });
+        document.getElementById('buybarAdd').textContent = 'Đã thêm vào giỏ';
+        n++;
+        badges.forEach(function(b){
+          b.textContent = n;
+          b.classList.add('pop');
+          setTimeout(function(){ b.classList.remove('pop'); }, 380);
+        });
       });
     });
+  }
+
+  /* thanh mua ở đáy: chỉ hiện khi đã cuộn qua khối nút mua trong trang */
+  var bar = document.getElementById('buybar');
+  var cta = document.querySelector('.cta');
+  if (bar && cta){
+    document.getElementById('buybarName').textContent  = (document.querySelector('.info__h1') || {}).textContent || '';
+    document.getElementById('buybarPrice').textContent = (document.querySelector('.info__price b') || {}).textContent || '';
+    var syncBar = function(){
+      bar.classList.toggle('on', cta.getBoundingClientRect().bottom < 0);
+    };
+    addEventListener('scroll', syncBar, { passive: true });
+    addEventListener('resize', syncBar);
+    /* thêm nhịp kiểm tra định kỳ: chỉ nghe scroll thì có lúc không nhận được
+       sự kiện (cùng lý do đã phải làm chốt chặn cho animate-text) */
+    setInterval(syncBar, 150);
+    syncBar();
   }
 })();
 
@@ -901,10 +1081,14 @@ window.NS_PRODUCTS = {
       var frag = document.createDocumentFragment();
       node.nodeValue.split(/(\s+)/).forEach(function(part){
         if (!part) return;
+        /* Khoảng trắng để nguyên dạng text node, KHÔNG bọc span: span có
+           white-space:pre (spec yêu cầu) sẽ giữ lại cả khoảng trắng mà HTML
+           vốn thu gọn — ví dụ dấu cách ngay sau <br> sẽ thành thụt đầu dòng. */
+        if (/^\s+$/.test(part)){ frag.appendChild(document.createTextNode(part)); return; }
         var sp = document.createElement('span');
         sp.className = 'text-animation-unit';
         sp.textContent = part;
-        if (!/^\s+$/.test(part)) words.push(sp);
+        words.push(sp);
         frag.appendChild(sp);
       });
       node.parentNode.replaceChild(frag, node);
@@ -938,7 +1122,9 @@ window.NS_PRODUCTS = {
   function check(){
     for (var i = pending.length - 1; i >= 0; i--){
       var el = pending[i], r = el.getBoundingClientRect();
-      if (r.top < window.innerHeight * 0.92 && r.bottom > 0){ play(el); pending.splice(i, 1); }
+      /* không kiểm tra r.bottom > 0: phần tử đã cuộn qua khỏi khung nhìn
+         (nhảy anchor, phím End, vuốt mạnh) vẫn phải được hiện, không thì kẹt ẩn */
+      if (r.top < window.innerHeight * 0.92){ play(el); pending.splice(i, 1); }
     }
   }
   addEventListener('scroll', check, { passive: true });
@@ -1008,12 +1194,15 @@ window.NS_PRODUCTS = {
   var spec = P[pid].frames3d;
 
   var btn    = document.getElementById('btn3d');
+  var btnIco = btn ? btn.querySelector('img') : null;
+  var ICO = { off:'img-pdp/ic-3d.svg', on:'img-pdp/ic-3d-pink.svg' };
   var layer  = document.getElementById('v3d');
   var canvas = document.getElementById('v3dCanvas');
   var hint   = document.getElementById('v3dHint');
   var load   = document.getElementById('v3dLoad');
   var bar    = document.getElementById('v3dBar');
-  var still  = document.querySelector('.gallery__stage img');
+  var still  = document.querySelector('.gallery__stage>img');
+  var stage  = document.querySelector('.gallery__stage');
   var modal  = document.getElementById('no3d');
   if (!btn) return;
 
@@ -1062,7 +1251,7 @@ window.NS_PRODUCTS = {
           bar.style.width = Math.round(got / spec.count * 100) + '%';
           if (got === spec.count){ ready = true; load.hidden = true; done(); }
         };
-        im.src = spec.dir + 'f' + (i < 10 ? '0' + i : i) + '.webp';
+        im.src = spec.dir + 'frame_' + String(i + 1).padStart(4, '0') + '.webp';
         imgs[i] = im;
       })(i);
     }
@@ -1071,23 +1260,35 @@ window.NS_PRODUCTS = {
   function enter(){
     on = true;
     layer.classList.add('on');
+    stage.classList.add('is3d');
     btn.classList.add('on');
+    if (btnIco) btnIco.src = ICO.on;
     still.style.visibility = 'hidden';
     if (ready) draw(); else preload(draw);
   }
   function exit(){
     on = false;
     layer.classList.remove('on');
+    stage.classList.remove('is3d');
     btn.classList.remove('on');
+    if (btnIco) btnIco.src = ICO.off;
     still.style.visibility = '';
     cancelAnimationFrame(raf);
   }
 
   btn.addEventListener('click', function(){ on ? exit() : enter(); });
 
-  /* PRODUCT VIEW / MODEL VIEW cũng thoát khỏi chế độ 3D */
-  document.querySelectorAll('.viewtoggle button').forEach(function(b){
-    b.addEventListener('click', function(){ if (on) exit(); });
+  /* PRODUCT VIEW / MODEL VIEW: thoát 3D và đổi ảnh (nếu sản phẩm có ảnh model) */
+  var product = P[pid];
+  var toggles = [].slice.call(document.querySelectorAll('.viewtoggle button'));
+  toggles.forEach(function(b, i){
+    b.addEventListener('click', function(){
+      if (on) exit();
+      var wantModel = (i === 0);
+      if (wantModel && !product.model) return;      // chưa có ảnh model thì giữ nguyên
+      still.src = wantModel ? product.model : product.img;
+      still.classList.toggle('is-model', wantModel);
+    });
   });
 
   /* ── kéo để xoay ── */
@@ -1111,7 +1312,7 @@ window.NS_PRODUCTS = {
     if (!dragging) return;
     var dx = e.clientX - lastX;
     lastX = e.clientX;
-    if (Math.abs(dx) > 0){ moved = true; hint.classList.add('gone'); }
+    if (Math.abs(dx) > 0) moved = true;
     vel = dx;
     step(dx);
   });
@@ -1127,6 +1328,37 @@ window.NS_PRODUCTS = {
   }
   canvas.addEventListener('pointerup', release);
   canvas.addEventListener('pointercancel', release);
+})();
+</script>
+<script>
+/* Menu mobile dùng dialog native: tự giữ focus trong menu và hỗ trợ Escape.
+   Giống hệt trang chủ để hai trang đồng bộ. */
+(function(){
+  var mobileMenu = document.getElementById('mobileMenu');
+  if (!mobileMenu || typeof mobileMenu.showModal !== 'function') return;
+  var triggers = [].slice.call(document.querySelectorAll('.menubtn'));
+  var closeButton = mobileMenu.querySelector('.mobile-menu__close');
+  var returnFocus = null;
+  function setExpanded(v){ triggers.forEach(function(t){ t.setAttribute('aria-expanded', String(v)); }); }
+  triggers.forEach(function(trigger){
+    trigger.addEventListener('click', function(){
+      returnFocus = trigger; setExpanded(true);
+      document.documentElement.classList.add('menu-open');
+      mobileMenu.showModal(); closeButton.focus();
+    });
+  });
+  closeButton.addEventListener('click', function(){ mobileMenu.close(); });
+  [].slice.call(mobileMenu.querySelectorAll('a')).forEach(function(a){
+    a.addEventListener('click', function(){ mobileMenu.close(); });
+  });
+  mobileMenu.addEventListener('close', function(){
+    setExpanded(false);
+    document.documentElement.classList.remove('menu-open');
+    if (returnFocus && returnFocus.isConnected) returnFocus.focus();
+  });
+  addEventListener('resize', function(){
+    if (window.innerWidth > 768 && mobileMenu.open) mobileMenu.close();
+  });
 })();
 </script>
 </body>
