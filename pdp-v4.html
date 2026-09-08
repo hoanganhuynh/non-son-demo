@@ -1,0 +1,925 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#fbfaf7">
+<meta name="description" content="Nón Phớt Da Cừu Heritage — nón phớt da cừu cao cấp của Nón Sơn.">
+<title>Nón Phớt Da Cừu Heritage — Nón Sơn</title>
+<link rel="icon" href="img-v4/logo-nonson.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Archivo:wdth,wght@100,400;100,500;100,600&display=swap" rel="stylesheet">
+<style>
+/*  Nón Sơn · Product details — dựng 1:1 từ Figma node 20:13983
+    Khung gốc 1920px (khác trang chủ 1600px). Từ 1201px trở lên giữ
+    nguyên khung và thu phóng bằng CSS zoom; dưới 1200px chuyển sang
+    layout co giãn thật.                                              */
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{background:#fbfaf7}
+body{background:#fbfaf7;-webkit-font-smoothing:antialiased;font-family:Archivo,Arial,sans-serif;font-variation-settings:"wdth" 100}
+img{display:block;max-width:none}
+a{text-decoration:none;color:inherit}
+button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
+
+#stage{width:1920px;background:#fbfaf7;transform-origin:0 0}
+.ns{font-family:Newsreader,Georgia,serif;font-weight:400}
+.ns-med{font-family:Newsreader,Georgia,serif;font-weight:500}
+
+/* ───────── Header (199:4836) ───────── */
+.hd{height:78px;display:flex;align-items:center;padding:0 116px;position:relative;z-index:3}
+.hd__logo{position:relative;width:115px;height:49px;overflow:hidden;flex:none}
+.hd__logo img{position:absolute;left:0;top:0;width:89.64%;height:100%}
+.hd__nav{display:flex;gap:32px;margin-left:auto;font-size:14px;color:#121212;
+  letter-spacing:1.382px;text-transform:uppercase;white-space:nowrap}
+.hd__nav a{transition:color .22s ease}
+.hd__nav a:hover{color:#d11f70}
+.hd__act{display:flex;align-items:center;gap:12px;margin-left:32px}
+.iconbtn{position:relative;width:34.4px;height:34.4px;display:flex;align-items:center;justify-content:center;
+  border:1px solid rgba(18,18,18,.18);border-radius:999px;transition:background-color .22s ease,border-color .22s ease}
+.iconbtn img{width:15.2px;height:15px;transform:scaleY(-1);filter:brightness(0)}
+.iconbtn:hover{background:#d11f70;border-color:#d11f70}
+.iconbtn:hover img{filter:brightness(0) invert(1)}
+.iconbtn .cnt{position:absolute;right:-5px;top:-5px;width:18px;height:18px;background:#d11f70;
+  border:1px solid #fbfaf7;border-radius:999px;display:flex;align-items:center;justify-content:center;
+  font-weight:600;font-size:8.3px;color:#fff;line-height:1;transition:transform .34s cubic-bezier(.34,1.56,.64,1)}
+.iconbtn .cnt.pop{transform:scale(1.55)}
+
+/* ───────── Breadcrumb (20:13665) ───────── */
+main{padding-top:9px}   /* Figma: header cao 78, Main bắt đầu ở y=87 */
+.crumb{display:flex;align-items:center;gap:6.4px;padding:22.4px 128px}
+.crumb span,.crumb a{font-size:12px;color:#766f67;letter-spacing:1.44px;text-transform:uppercase;
+  line-height:18px;white-space:nowrap}
+.crumb a:hover{color:#d11f70}
+.crumb img{width:13.45px;height:12px;transform:scaleY(-1)}
+
+/* ───────── Gallery + Info (20:13675) ───────── */
+.pdp{display:flex;gap:15px;align-items:flex-start;justify-content:center;padding:0 128px 144px}
+.gallery{width:937px;flex:none;display:flex;flex-direction:column;gap:16px;align-items:center;overflow:hidden}
+.gallery__stage{position:relative;width:937px;height:784px;overflow:hidden}
+.gallery__stage img{position:absolute;height:119.52%;left:-.03%;top:-9.77%;width:100%}
+.pill3d{position:absolute;left:calc(50% + .26px);transform:translateX(-50%);top:685.6px;
+  background:rgba(0,0,0,.08);padding:12px 16px;border-radius:99px;display:flex;align-items:center;gap:10px;
+  transition:background-color .22s ease}
+.pill3d:hover{background:rgba(0,0,0,.16)}
+.pill3d img{width:24px;height:24px}
+.pill3d span{font-size:15.294px;color:#111;letter-spacing:1.5294px;text-transform:uppercase;line-height:22.941px}
+.viewtoggle{display:flex;gap:4.066px;padding:4.078px;background:#fbfaf7;border:1.275px solid rgba(18,18,18,.14)}
+.viewtoggle button{padding:9.176px 14.275px;font-size:15.294px;color:#766f67;letter-spacing:1.5294px;
+  text-transform:uppercase;white-space:nowrap;transition:background-color .22s ease,color .22s ease}
+.viewtoggle button[aria-pressed="true"]{background:#121212;color:#f4f1ea}
+.viewtoggle button:not([aria-pressed="true"]):hover{color:#121212}
+
+.info{width:611.52px;flex:none;position:sticky;top:0;padding-top:28.8px;
+  display:flex;flex-direction:column;align-items:flex-start;gap:16px}
+.info__eyebrow{font-weight:600;font-size:12px;color:#d11f70;letter-spacing:2.4px;text-transform:uppercase;line-height:18px;width:100%}
+.info__h1{padding-top:2.185px;font-size:80px;color:#121212;letter-spacing:-.8px;line-height:1.1;width:100%}
+.info__sku{padding:6.9px 0 10.9px;font-size:12px;color:#766f67;letter-spacing:.24px;line-height:18px;width:100%}
+.info__price{display:flex;align-items:center;justify-content:space-between;width:100%}
+.info__price b{font-weight:600;font-size:18.4px;color:#d11f70;line-height:27.6px}
+.info__stock{display:flex;align-items:center;gap:5.59px;font-size:14px;color:#50734e;line-height:18px;white-space:nowrap}
+.info__stock img{width:13.6px;height:13.5px;transform:scaleY(-1)}
+.info__tagline{font-size:32px;color:#30282a;line-height:32.64px;width:100%}
+.info__tagline em{font-style:italic;color:#d11f70}
+.info__desc{padding:12.49px 0 10.9px;font-size:14px;color:#766f67;letter-spacing:.24px;line-height:1.3;width:100%}
+
+.opt{width:100%;display:flex;flex-direction:column;gap:11.2px}
+.opt--top{border-top:1px solid rgba(18,18,18,.14);padding-top:18.4px}
+.opt--size{padding-top:10px;gap:11.19px}
+.opt__row{display:flex;align-items:center;justify-content:space-between;width:100%}
+.opt__lbl{font-weight:600;font-size:12px;color:#121212;line-height:18px;white-space:nowrap}
+.opt__link{font-size:14px;color:#d11f70;line-height:18px;white-space:nowrap;border-bottom:1px solid #d11f70}
+.opt__link--sm{font-size:12px}
+.swatches{display:flex;align-items:center;gap:16px;width:100%}
+.sw{width:23.2px;height:23.2px;border-radius:11.6px;flex:none;transition:transform .22s ease}
+.sw:hover{transform:scale(1.1)}
+.sw--on{background:#765500;box-shadow:0 0 0 1px #121212,0 0 0 3px #f4f1ea,0 0 0 4px #121212}
+.sizes{display:flex;flex-wrap:wrap;gap:0 7.2px;width:100%}
+.size{min-width:51.2px;padding:10.4px 12px;border:1px solid rgba(18,18,18,.14);font-size:12px;color:#121212;
+  line-height:18px;text-align:center;transition:border-color .22s ease,background-color .22s ease,color .22s ease}
+.size:hover{border-color:#121212}
+.size[aria-pressed="true"]{background:#d11f70;border-color:#d11f70;color:#f4f1ea}
+
+.cta{display:flex;gap:9.59px;align-items:stretch;padding-top:10.9px;width:100%}
+.cta button,.cta a{min-height:53.59px;display:flex;align-items:center;justify-content:center;gap:.01px;
+  font-weight:600;font-size:12px;letter-spacing:1.56px;text-transform:uppercase;line-height:18px;white-space:nowrap;
+  transition:background-color .22s ease,color .22s ease,box-shadow .22s ease}
+.cta__add{flex:1 0 0;min-width:0;background:#d11f70;color:#f4f1ea}
+.cta__add:hover{background:#b0155c;box-shadow:0 12px 26px -14px rgba(209,31,112,.85)}
+.cta__buy{flex:1 0 0;min-width:0;border:1px solid #d11f70;color:#d11f70;background:rgba(209,31,112,0)}
+.cta__buy:hover{background:rgba(209,31,112,.09)}
+.cta img{width:13.56px;height:12px;transform:scaleY(-1)}
+.cta__wish{width:53.59px;flex:none;border:1px solid rgba(18,18,18,.14);display:flex;align-items:center;justify-content:center}
+.cta__wish img{width:18.41px;height:18.5px;transform:scaleY(-1)}
+.cta__wish:hover{border-color:#d11f70}
+.cta__wish[aria-pressed="true"]{background:#d11f70;border-color:#d11f70}
+.cta__wish[aria-pressed="true"] img{filter:brightness(0) invert(1)}
+
+.trustline{display:flex;align-items:center;width:100%;font-size:12px;color:#766f67;line-height:17.4px;white-space:nowrap}
+.trustline img{width:12px;height:12px;transform:scaleY(-1);flex:none}
+.trustcards{display:flex;gap:7.2px;justify-content:center;padding-top:10.79px;width:100%}
+.trustcards div{width:199.04px;border:1px solid rgba(18,18,18,.14);padding:15px 17px;
+  display:flex;flex-direction:column;gap:11px;transition:border-color .22s ease}
+.trustcards div:hover{border-color:rgba(18,18,18,.34)}
+.trustcards img{width:16px;height:16px;transform:scaleY(-1)}
+.trustcards span{font-size:12px;color:#766f67;line-height:15.6px;white-space:nowrap}
+
+/* ───────── Editorial (20:13801) ───────── */
+.editorial{background:#121212;display:flex;align-items:flex-start;justify-content:center}
+.editorial__media{flex:1 0 0;min-width:0;height:726.58px;min-height:480px;position:relative;overflow:hidden}
+.editorial__media .tint{position:absolute;inset:0;background:#29151d;overflow:hidden}
+.editorial__media .tint img{position:absolute;height:198.19%;left:0;top:-49.09%;width:100%}
+.editorial__media>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.editorial__quote{position:absolute;left:612px;top:124.36px;transform:translateY(-50%);width:314px;
+  font-size:32px;color:#111;line-height:1.1}
+.editorial__panel{width:876px;height:726px;flex:none;padding:121px 128px;
+  display:flex;flex-direction:column;align-items:flex-start;justify-content:space-between}
+.editorial__panel .head{display:flex;flex-direction:column;gap:24px;width:100%}
+.editorial__kick{font-weight:600;font-size:15px;color:#ff3b94;letter-spacing:2.64px;text-transform:uppercase;width:100%}
+.editorial__panel h2{font-size:64px;color:#fff;line-height:1.1;width:100%}
+.editorial__panel p{font-size:16px;color:rgba(255,255,255,.7);line-height:1.33;width:100%}
+.editorial__code{border-top:1px solid rgba(255,255,255,.2);padding:24px 0;display:flex;align-items:center;gap:24px;width:100%}
+.editorial__code b{font-family:Newsreader,Georgia,serif;font-weight:400;font-size:56px;color:#ff3b94;
+  line-height:1.1;white-space:nowrap}
+.editorial__code span{flex:1 0 0;min-width:0;font-size:16px;color:rgba(255,255,255,.58);
+  letter-spacing:1.2px;text-transform:uppercase;line-height:1.3}
+
+/* ───────── Điểm đáng chú ý (20:13820) ───────── */
+.hl{background:#fbfaf7;padding:144px 213px;display:flex;flex-direction:column;gap:58px;align-items:flex-start}
+.hl__head{display:flex;align-items:flex-end;justify-content:space-between;width:100%;white-space:nowrap}
+.hl__head .l{display:flex;flex-direction:column;gap:15.375px;min-width:696.03px}
+.eyebrow-gold{font-weight:600;font-size:15px;color:#765500;letter-spacing:2.64px;text-transform:uppercase}
+.hl__head h2{font-size:64px;color:#121212;line-height:1.1}
+.hl__head p{font-size:16px;color:#766f67;line-height:1.4}
+.hl__grid{display:flex;gap:16px;align-items:flex-start;justify-content:center;width:100%}
+.hl__item{flex:1 0 0;min-width:0;border-top:2px solid #d11f70;padding-top:33px;
+  display:flex;flex-direction:column;gap:21px;align-items:flex-start}
+.hl__icon{position:relative;width:56px;height:56px;overflow:hidden;flex:none}
+.hl__icon img{position:absolute}
+.hl__icon .i-leather{width:57px;height:42.07px;left:-.5px;top:6.97px}
+.hl__icon .i-shape{width:50.21px;height:43.54px;left:2.73px;top:9.38px}
+.hl__icon .i-size{width:56px;height:56px;left:0;top:0}
+.hl__item h3{padding-top:6.25px;font-family:Newsreader,Georgia,serif;font-weight:500;font-size:32px;
+  color:#121212;line-height:30.4px;width:100%}
+.hl__item p{font-size:16px;color:#766f67;line-height:1.4;width:100%}
+.hl__item:last-child{padding-bottom:18.24px}
+
+/* ───────── Thông tin sản phẩm (20:13854) ───────── */
+.specs{background:#f2f2f2;padding:144px 213px;display:grid;grid-template-columns:.8fr 1.2fr;
+  grid-template-rows:273.11px;align-items:start}
+.specs__l{display:flex;flex-direction:column;gap:21px;align-items:flex-start;padding-bottom:25.54px}
+.specs__l h2{max-width:671.62px;font-size:71px;color:#121212;line-height:65.7px;width:100%}
+.specs__l p{width:442px;max-width:100%;font-size:16px;color:#766f67;line-height:1.4}
+.specs__list{display:flex;flex-direction:column;align-items:flex-start}
+.specs__row{display:flex;align-items:flex-start;width:100%;min-height:54.42px;padding:17.6px 0;
+  border-bottom:1px solid rgba(18,18,18,.14)}
+.specs__term{width:222px;flex:none;display:flex;align-items:center;gap:8.79px;margin-right:-44px}
+.specs__term img{width:16.8px;height:16.5px;transform:scaleY(-1);flex:none}
+.specs__term span{font-size:16px;color:#d11f70;letter-spacing:1.44px;text-transform:uppercase;
+  line-height:18px;white-space:nowrap}
+.specs__row>p{flex:1 0 0;min-width:0;font-size:16px;color:#3f3934;line-height:1.4}
+
+/* ───────── Band size (20:13908) ───────── */
+.sizeband{background:#d11f70;padding:32px 213px;display:flex;align-items:center;justify-content:space-between;gap:24px}
+.sizeband h2{font-family:Newsreader,Georgia,serif;font-weight:500;font-size:35.2px;color:#fff;
+  line-height:31.68px;white-space:nowrap}
+.sizeband p{max-width:512px;padding-right:15.77px;font-size:16px;color:#fff;line-height:1.4}
+.sizeband a{display:flex;align-items:center;padding-bottom:5.6px;border-bottom:1px solid #fff;
+  font-weight:600;font-size:12px;color:#fff;letter-spacing:1.44px;text-transform:uppercase;white-space:nowrap;
+  transition:opacity .22s ease}
+.sizeband a:hover{opacity:.75}
+.sizeband a img{width:13.45px;height:12px;transform:scaleY(-1)}
+
+/* ───────── Footer (dùng chung với trang chủ) ───────── */
+.foot{background:#121212;padding:56px 116px 24px;display:flex;flex-direction:column;align-items:flex-start}
+.foot__top{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:48px;padding-bottom:48px;width:100%;height:168.16px;
+  border-bottom:1px solid rgba(244,241,234,.2)}
+.foot__brand{display:flex;flex-direction:column;gap:21.5px;align-self:flex-start}
+.foot__brand .logo{width:144px;height:61.2px;overflow:hidden;position:relative}
+.foot__brand .logo img{position:absolute;left:0;top:0;width:100%;height:100%}
+.foot__brand p{max-width:320px;width:320px;font-size:14px;color:rgba(244,241,234,.6);line-height:1.4}
+.foot__col{display:flex;flex-direction:column;gap:11.2px;padding:6.75px 0 8.27px;align-self:flex-start}
+.foot__col h4{font-weight:600;font-size:9.9px;color:#fff;letter-spacing:1.587px;text-transform:uppercase;line-height:14.88px}
+.foot__col a{font-size:13px;color:rgba(244,241,234,.65);width:100%;transition:color .22s ease}
+.foot__col a:first-of-type{padding-top:2.25px}
+.foot__col a:hover{color:#fff}
+.foot__bot{padding-top:20.8px;display:flex;align-items:center;justify-content:space-between;width:100%}
+.foot__bot span{font-size:9.3px;color:rgba(244,241,234,.4);letter-spacing:1.114px;text-transform:uppercase;line-height:13.92px}
+.foot__end{display:flex;align-items:center;gap:14px}
+.totop{width:30px;height:30px;margin-block:-8px;border:1px solid rgba(244,241,234,.24);border-radius:999px;flex:none;
+  display:flex;align-items:center;justify-content:center;color:rgba(244,241,234,.6);
+  transition:background-color .22s ease,border-color .22s ease,color .22s ease,transform .26s cubic-bezier(.22,.9,.24,1)}
+.totop svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.totop:hover{background:#d11f70;border-color:#d11f70;color:#fff;transform:translateY(-2px)}
+
+/* ───────── Sticky header ───────── */
+.stickyhd{position:fixed;top:0;left:0;width:1920px;z-index:200;
+  background:rgba(251,250,247,.94);backdrop-filter:blur(14px) saturate(1.3);
+  border-bottom:1px solid rgba(18,18,18,.1);display:flex;align-items:center;padding:13px 116px;
+  transform:translateY(-101%);transition:transform .42s cubic-bezier(.22,.9,.24,1)}
+.stickyhd.on{transform:none}
+.stickyhd__logo{position:relative;width:104px;height:39.6px;overflow:hidden;flex:none}
+.stickyhd__logo img{position:absolute;left:0;top:0;width:89.64%;height:100%}
+.stickyhd__nav{display:flex;gap:32px;margin-left:40px;font-size:14px;color:#121212;
+  letter-spacing:1.382px;text-transform:uppercase;white-space:nowrap}
+.stickyhd__nav a:hover{color:#d11f70}
+.stickyhd__act{display:flex;align-items:center;gap:12px;margin-left:auto}
+@media (max-width:900px){.stickyhd__nav{display:none}}
+
+/* ───────── Cursor follower ───────── */
+.cursor-follow{position:fixed;inset:0;z-index:900;pointer-events:none;
+  mix-blend-mode:difference;opacity:0;transition:opacity .25s ease}
+.cursor-follow i{position:absolute;left:0;top:0;display:block;border-radius:999px}
+.cursor-follow .cf-dot{width:8px;height:8px;margin:-4px 0 0 -4px;background:#fff}
+.cursor-follow .cf-ring{width:28px;height:28px;margin:-14px 0 0 -14px;border:1px solid #fff;
+  transition:width .3s,height .3s,margin .3s}
+.cursor-follow.is-hover .cf-ring{width:44px;height:44px;margin:-22px 0 0 -22px}
+html.has-cursor,html.has-cursor *{cursor:none!important}
+
+/* ───────── animate-text · short-slide-right ───────── */
+.text-animation-title{display:inline-block;transform-style:preserve-3d;will-change:transform,filter}
+.text-animation-unit{display:inline-block;backface-visibility:hidden;white-space:pre;
+  transform-origin:50% 55%;will-change:opacity}
+@media (prefers-reduced-motion:reduce){
+  .text-animation-title{transform:none!important;filter:none!important}
+  .text-animation-unit{opacity:1!important}
+  *{transition-duration:.01ms!important}
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   RESPONSIVE — giống trang chủ: ≥1201px giữ khung 1920 và zoom;
+   ≤1200px chuyển html.fluid, layout co giãn thật (1200·1024·768·480)
+   ══════════════════════════════════════════════════════════════════ */
+html.fluid{--pad:48px}
+@media (max-width:1024px){html.fluid{--pad:32px}}
+@media (max-width:768px){html.fluid{--pad:20px}}
+
+html.fluid #stage{width:100%;zoom:1}
+html.fluid .hd{padding:0 var(--pad)}
+html.fluid .crumb{padding:18px var(--pad);flex-wrap:wrap}
+html.fluid .pdp{padding:0 var(--pad) 88px;gap:32px}
+html.fluid .gallery{width:auto;flex:1 1 52%;min-width:0}
+html.fluid .gallery__stage{width:100%;height:auto;aspect-ratio:937/784}
+html.fluid .pill3d{top:auto;bottom:16px}
+html.fluid .info{width:auto;flex:1 1 44%;min-width:0;padding-top:0}
+html.fluid .info__h1{font-size:clamp(34px,4.4vw,64px)}
+html.fluid .info__tagline{font-size:clamp(20px,2.4vw,28px);line-height:1.15}
+html.fluid .trustcards div{width:auto;flex:1 1 0;min-width:0}
+html.fluid .trustcards span,html.fluid .trustline{white-space:normal}
+html.fluid .editorial{flex-direction:column}
+html.fluid .editorial__media{width:100%;flex:none;height:min(52vw,520px);min-height:0}
+html.fluid .editorial__quote{left:auto;right:6%;top:auto;bottom:24px;transform:none;width:min(46%,320px);font-size:clamp(18px,2.2vw,28px)}
+html.fluid .editorial__panel{width:100%;height:auto;flex:none;padding:72px var(--pad);gap:48px}
+html.fluid .editorial__panel h2{font-size:clamp(30px,4.4vw,52px)}
+html.fluid .hl,html.fluid .specs{padding:88px var(--pad)}
+html.fluid .specs{grid-template-rows:auto}
+html.fluid .stickyhd{width:100%;padding:11px var(--pad)}
+/* cột grid 1fr có min-width:auto — đoạn văn width:442px ép cả section rộng
+   quá khung nhìn ở màn nhỏ, nên phải hạ min-width và bỏ bề rộng cứng */
+html.fluid .specs>*{min-width:0}
+html.fluid .specs__l p{width:100%}
+html.fluid .specs__l h2{max-width:none}
+html.fluid .specs{grid-template-rows:auto}
+html.fluid .hl__head,html.fluid .hl__head .l{white-space:normal}
+html.fluid .hl__head .l{min-width:0}
+html.fluid .hl__head h2,html.fluid .specs__l h2{font-size:clamp(30px,4.4vw,52px)}
+html.fluid .specs__l h2{line-height:1.05}
+html.fluid .specs__row>p,html.fluid .specs__term span,html.fluid .sizeband h2{white-space:normal}
+html.fluid .sizeband{padding:40px var(--pad)}
+html.fluid .foot{padding:48px var(--pad) 24px}
+html.fluid .foot__top{height:auto}
+
+@media (max-width:1024px){
+  html.fluid .pdp{flex-direction:column}
+  html.fluid .gallery,html.fluid .info{flex:none;width:100%}
+  html.fluid .info{position:static}
+  html.fluid .hl__head{flex-direction:column;align-items:flex-start;gap:18px}
+  html.fluid .hl__grid{flex-wrap:wrap;gap:32px 16px}
+  html.fluid .hl__item{flex:1 1 44%}
+  html.fluid .specs{grid-template-columns:1fr;gap:40px}
+  html.fluid .editorial__quote{position:static;width:auto;padding:20px var(--pad);color:#f4f1ea;background:#121212}
+  html.fluid .sizeband{flex-direction:column;align-items:flex-start;gap:20px}
+  html.fluid .sizeband p{max-width:none;padding-right:0}
+  html.fluid .foot__top{grid-template-columns:1fr 1fr}
+}
+@media (max-width:768px){
+  html.fluid .hl__item{flex:1 1 100%}
+  html.fluid .specs__row{flex-direction:column;gap:8px}
+  html.fluid .specs__term{width:auto;margin-right:0}
+  html.fluid .trustcards{flex-wrap:wrap}
+  html.fluid .trustcards div{flex:1 1 45%}
+  html.fluid .foot__top{grid-template-columns:1fr;gap:28px}
+  html.fluid .foot__bot{flex-direction:column;align-items:flex-start;gap:14px}
+  html.fluid .foot__brand p{width:auto;max-width:none}
+  html.fluid .hd__nav{display:none}
+}
+@media (max-width:480px){
+  html.fluid .cta{flex-wrap:wrap}
+  html.fluid .cta__add,html.fluid .cta__buy{flex:1 1 100%}
+  html.fluid .cta__wish{width:100%}
+  html.fluid .trustcards div{flex:1 1 100%}
+  html.fluid .viewtoggle button{padding:9px 10px;font-size:13px;letter-spacing:1px}
+}
+</style>
+</head>
+<body>
+<div id="stage">
+
+<!-- Sticky header -->
+<header class="stickyhd" id="stickyHd">
+  <a class="stickyhd__logo" href="homepage-v4.html" aria-label="Nón Sơn"><img src="img-v4/logo-nonson.png" alt="Nón Sơn"></a>
+  <nav class="stickyhd__nav"><a href="#">Danh mục</a><a href="#">Bán chạy</a><a href="#">Câu chuyện</a><a href="#">Trợ giúp</a></nav>
+  <div class="stickyhd__act">
+    <button class="iconbtn" aria-label="Tìm kiếm"><img src="img-v4/ic-search.svg" alt=""></button>
+    <button class="iconbtn" aria-label="Mở giỏ hàng"><img src="img-v4/ic-cart.svg" alt=""><span class="cnt">2</span></button>
+  </div>
+</header>
+
+<!-- ══ Header · 199:4836 ══ -->
+<header class="hd">
+  <a class="hd__logo" href="homepage-v4.html" aria-label="Nón Sơn"><img src="img-v4/logo-nonson.png" alt="Nón Sơn"></a>
+  <nav class="hd__nav"><a href="#">Danh mục</a><a href="#">Bán chạy</a><a href="#">Câu chuyện</a><a href="#">Trợ giúp</a></nav>
+  <div class="hd__act">
+    <button class="iconbtn" aria-label="Tìm kiếm"><img src="img-v4/ic-search.svg" alt=""></button>
+    <button class="iconbtn" aria-label="Mở giỏ hàng"><img src="img-v4/ic-cart.svg" alt=""><span class="cnt">2</span></button>
+  </div>
+</header>
+
+<main>
+<!-- ══ Breadcrumb · 20:13665 ══ -->
+<nav class="crumb" aria-label="Đường dẫn">
+  <a href="homepage-v4.html">Trang chủ</a>
+  <img src="img-pdp/ic-crumb.svg" alt="">
+  <a href="#">Nón da</a>
+  <img src="img-pdp/ic-crumb.svg" alt="">
+  <span aria-current="page">Nón Phớt Da Cừu Heritage</span>
+</nav>
+
+<!-- ══ Gallery + Info · 20:13675 ══ -->
+<section class="pdp">
+  <div class="gallery">
+    <div class="gallery__stage">
+      <img src="img-pdp/hero-hat.png" alt="Nón Phớt Da Cừu Heritage">
+      <button class="pill3d"><img src="img-pdp/ic-3d.svg" alt=""><span>3D view</span></button>
+    </div>
+    <div class="viewtoggle">
+      <button aria-pressed="false">Model view</button>
+      <button aria-pressed="true">Product view</button>
+    </div>
+  </div>
+
+  <aside class="info">
+    <div class="info__eyebrow">Nón phớt · Da cừu cao cấp</div>
+    <h1 class="ns info__h1">Nón Phớt Da Cừu Heritage</h1>
+    <div class="info__sku">Mã kỹ thuật: P2DA-NU2 · Phiên bản màu Nâu</div>
+
+    <div class="info__price">
+      <b>10.000.000đ</b>
+      <span class="info__stock"><img src="img-pdp/ic-check.svg" alt="">Sẵn hàng tại showroom</span>
+    </div>
+
+    <p class="ns info__tagline">Một phom dáng kinh điển được kể lại bằng <em>da cừu</em> mềm và sắc nâu trầm.</p>
+    <p class="info__desc">Nón phớt Heritage dành cho những nhịp xuất hiện cần sự chỉn chu, với bề mặt da tạo cảm giác sang trọng và dễ phối.</p>
+
+    <div class="opt opt--top">
+      <div class="opt__row">
+        <span class="opt__lbl">Màu sắc</span>
+        <span class="opt__link" id="colorName">Màu nâu</span>
+      </div>
+      <div class="swatches" id="swatches">
+        <button class="sw sw--on" data-n="Màu nâu" aria-pressed="true" aria-label="Màu nâu"></button>
+        <button class="sw" style="background:#737373" data-n="Màu xám" aria-pressed="false" aria-label="Màu xám"></button>
+        <button class="sw" style="background:#111" data-n="Màu đen" aria-pressed="false" aria-label="Màu đen"></button>
+      </div>
+    </div>
+
+    <div class="opt opt--size">
+      <div class="opt__row">
+        <span class="opt__lbl">Vòng đầu</span>
+        <a class="opt__link opt__link--sm" href="#">Hướng dẫn chọn size</a>
+      </div>
+      <div class="sizes" id="sizes">
+        <button class="size" aria-pressed="false">56 cm</button>
+        <button class="size" aria-pressed="true">58 cm</button>
+        <button class="size" aria-pressed="false">60 cm</button>
+        <button class="size" aria-pressed="false">62 cm</button>
+      </div>
+    </div>
+
+    <div class="cta">
+      <button class="cta__add" id="addToCart">Thêm vào giỏ&nbsp;<img src="img-pdp/ic-cart.svg" alt=""></button>
+      <a class="cta__buy" href="#">Mua ngay<img src="img-pdp/ic-buy.svg" alt=""></a>
+      <button class="cta__wish" aria-pressed="false" aria-label="Lưu sản phẩm"><img src="img-pdp/ic-heart.svg" alt=""></button>
+    </div>
+
+    <div class="trustline"><img src="img-pdp/ic-shield-sm.svg" alt="">&nbsp;Chính hãng · Kiểm tra hàng trước khi thanh toán COD · Đổi size miễn phí.</div>
+
+    <div class="trustcards">
+      <div><img src="img-pdp/ic-trust-cr.svg" alt=""><span>Tem CR &amp; chuẩn an toàn QCVN</span></div>
+      <div><img src="img-pdp/ic-trust-ship.svg" alt=""><span>Giao hàng toàn quốc</span></div>
+      <div><img src="img-pdp/ic-trust-store.svg" alt=""><span>Nhận tại showroom</span></div>
+    </div>
+  </aside>
+</section>
+
+<!-- ══ Editorial · 20:13801 ══ -->
+<section class="editorial">
+  <div class="editorial__media">
+    <div class="tint"><img src="img-pdp/editorial-bg.png" alt=""></div>
+    <img src="img-pdp/editorial-model.png" alt="Người mẫu đội nón phớt Heritage">
+    <p class="ns editorial__quote">Một phom dáng giữ lại tinh thần di sản.</p>
+  </div>
+  <div class="editorial__panel">
+    <div class="head">
+      <div class="editorial__kick">Câu chuyện chế tác</div>
+      <h2 class="ns">Kinh điển vì luôn đúng lúc.</h2>
+      <p>Nón Phớt Da Cừu Heritage đưa tinh thần nón phớt cổ điển vào một phiên bản đương đại: sắc nâu trầm, bề mặt da có chiều sâu và phom dáng dễ đi cùng những bộ trang phục chỉn chu.</p>
+    </div>
+    <div class="editorial__code">
+      <b>P2DA</b>
+      <span>mã sản phẩm<br>Heritage collection</span>
+    </div>
+  </div>
+</section>
+
+<!-- ══ Điểm đáng chú ý · 20:13820 ══ -->
+<section class="hl">
+  <div class="hl__head">
+    <div class="l">
+      <div class="eyebrow-gold">Điểm đáng chú ý</div>
+      <h2 class="ns">Một chiếc nón tốt<br>bắt đầu từ những chi tiết đúng.</h2>
+    </div>
+    <p>Từ cảm hứng đầu tiên đến quyết định mua, mọi thông tin quan<br>trọng đều được đặt đúng lúc và nói bằng ngôn ngữ dễ hiểu.</p>
+  </div>
+  <div class="hl__grid">
+    <article class="hl__item">
+      <span class="hl__icon"><img class="i-leather" src="img-pdp/feat-leather.svg" alt=""></span>
+      <h3>Da cừu mềm, sắc nâu trầm.</h3>
+      <p>Bề mặt da tạo cảm giác sang trọng và làm nổi bật tinh thần Heritage của sản phẩm.</p>
+    </article>
+    <article class="hl__item">
+      <span class="hl__icon"><img class="i-shape" src="img-pdp/feat-shape.svg" alt=""></span>
+      <h3>Phom phớt có cá tính.</h3>
+      <p>Silhouette gọn gàng, dễ kết hợp với trang phục thường ngày lẫn những dịp cần chỉn chu.</p>
+    </article>
+    <article class="hl__item">
+      <span class="hl__icon"><img class="i-size" src="img-pdp/feat-size.svg" alt=""></span>
+      <h3>Chọn đúng vòng đầu.</h3>
+      <p>Đo vòng đầu trước khi mua để chọn size vừa vặn và giữ phom nón đẹp khi đội.</p>
+    </article>
+  </div>
+</section>
+
+<!-- ══ Thông tin sản phẩm · 20:13854 ══ -->
+<section class="specs">
+  <div class="specs__l">
+    <div class="eyebrow-gold">Thông tin sản phẩm</div>
+    <h2 class="ns">Biết rõ điều<br>mình đang chọn.</h2>
+    <p>Mã P2DA-NU2 được giữ để đồng bộ kho và showroom; tên Heritage giúp bạn dễ nhận biết và ghi nhớ sản phẩm.</p>
+  </div>
+  <dl class="specs__list">
+    <div class="specs__row">
+      <dt class="specs__term"><img src="img-pdp/spec-shape.svg" alt=""><span>Phom dáng</span></dt>
+      <p>Nón phớt Heritage, phom cổ điển với sắc nâu tạo điểm nhấn trầm và sang.</p>
+    </div>
+    <div class="specs__row">
+      <dt class="specs__term"><img src="img-pdp/spec-material.svg" alt=""><span>Chất liệu</span></dt>
+      <p>Da cừu — chất liệu mềm, có bề mặt tự nhiên và cần được bảo quản tránh ẩm.</p>
+    </div>
+    <div class="specs__row">
+      <dt class="specs__term"><img src="img-pdp/spec-size.svg" alt=""><span>Kích thước</span></dt>
+      <p>56 / 58 / 60 / 62 cm. Đo vòng đầu ở vị trí rộng nhất trước khi chọn size.</p>
+    </div>
+    <div class="specs__row">
+      <dt class="specs__term"><img src="img-pdp/spec-warranty.svg" alt=""><span>Bảo hành</span></dt>
+      <p>Bảo hành chính hãng và hỗ trợ chăm sóc tại hệ thống showroom Nón Sơn.</p>
+    </div>
+    <div class="specs__row">
+      <dt class="specs__term"><img src="img-pdp/spec-ship.svg" alt=""><span>Giao nhận</span></dt>
+      <p>COD toàn quốc, kiểm tra hàng trước khi thanh toán; guest checkout không bắt buộc tạo tài khoản.</p>
+    </div>
+  </dl>
+</section>
+
+<!-- ══ Band size · 20:13908 ══ -->
+<section class="sizeband">
+  <h2>Không chắc về size?</h2>
+  <p>Gửi số đo vòng đầu qua Zalo OA hoặc ghé showroom gần nhất. Đội ngũ Nón Sơn sẽ giúp bạn chọn đúng phom trước khi mua.</p>
+  <a href="#">Tư vấn chọn size&nbsp;<img src="img-pdp/ic-arrow-white.svg" alt=""></a>
+</section>
+</main>
+
+<!-- ══ Footer ══ -->
+<footer class="foot">
+  <div class="foot__top">
+    <div class="foot__brand">
+      <div class="logo"><img src="img-v4/logo-footer.png" alt="Nón Sơn"></div>
+      <p>Mũ bảo hiểm thời trang và nón thủ công Việt Nam cho nhịp sống hiện đại.</p>
+    </div>
+    <div class="foot__col">
+      <h4>Mua sắm</h4>
+      <a href="homepage-v4.html">Danh mục sản phẩm</a>
+      <a href="homepage-v4.html">Sản phẩm nổi bật</a>
+      <a href="#">Tư vấn chọn size</a>
+    </div>
+    <div class="foot__col">
+      <h4>Chăm sóc</h4>
+      <a href="#">Câu chuyện chế tác</a>
+      <a href="#">Chính sách đổi size</a>
+      <a href="#">Hệ thống showroom</a>
+    </div>
+  </div>
+  <div class="foot__bot">
+    <span>© 2026 Nón Sơn</span>
+    <div class="foot__end">
+      <span>Chính hãng · Được chăm sóc · Made in Vietnam</span>
+      <button class="totop" id="toTop" aria-label="Về đầu trang" title="Về đầu trang">
+        <svg viewBox="0 0 24 24"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+      </button>
+    </div>
+  </div>
+</footer>
+
+</div><!-- /#stage -->
+
+<script>
+/* ══════════════════════════════════════════════════════════════════
+   Danh mục sản phẩm — PDP chạy theo ?p=<id>, mặc định là da-cuu.
+   Bản Figma chỉ mô tả sản phẩm "Nón Phớt Da Cừu Heritage"; nội dung
+   của các sản phẩm còn lại do tôi soạn dựa trên thông tin ở trang chủ.
+   Những mục thuộc chính sách cửa hàng (kích thước, bảo hành, giao
+   nhận) giữ nguyên cho mọi sản phẩm vì đúng là chúng giống nhau.
+   ══════════════════════════════════════════════════════════════════ */
+window.NS_PRODUCTS = {
+  'da-cuu': {
+    cat:'Nón phớt · Da cừu cao cấp', crumbCat:'Nón da',
+    name:'Nón Phớt Da Cừu Heritage', sku:'P2DA-NU2', variant:'Nâu',
+    price:'10.000.000đ', img:'img-pdp/hero-hat.png', code:'P2DA',
+    colors:[['#765500','Màu nâu'],['#737373','Màu xám'],['#111','Màu đen']],
+    tagline:'Một phom dáng kinh điển được kể lại bằng <em>da cừu</em> mềm và sắc nâu trầm.',
+    desc:'Nón phớt Heritage dành cho những nhịp xuất hiện cần sự chỉn chu, với bề mặt da tạo cảm giác sang trọng và dễ phối.',
+    quote:'Một phom dáng giữ lại tinh thần di sản.',
+    edTitle:'Kinh điển vì luôn đúng lúc.',
+    edDesc:'Nón Phớt Da Cừu Heritage đưa tinh thần nón phớt cổ điển vào một phiên bản đương đại: sắc nâu trầm, bề mặt da có chiều sâu và phom dáng dễ đi cùng những bộ trang phục chỉn chu.',
+    hl:[['Da cừu mềm, sắc nâu trầm.','Bề mặt da tạo cảm giác sang trọng và làm nổi bật tinh thần Heritage của sản phẩm.'],
+        ['Phom phớt có cá tính.','Silhouette gọn gàng, dễ kết hợp với trang phục thường ngày lẫn những dịp cần chỉn chu.']],
+    shape:'Nón phớt Heritage, phom cổ điển với sắc nâu tạo điểm nhấn trầm và sang.',
+    material:'Da cừu — chất liệu mềm, có bề mặt tự nhiên và cần được bảo quản tránh ẩm.'
+  },
+  'sonmai-hoanggia': {
+    cat:'Mũ bảo hiểm · Sơn mài', crumbCat:'Mũ bảo hiểm',
+    name:'Mũ Sơn Mài Hoàng Gia', sku:'P3SM-HG1', variant:'Đỏ tulip',
+    price:'3.850.000đ', img:'img-v4/pr-sonmai-hoanggia.png', code:'P3SM',
+    colors:[['#B33A2B','Đỏ tulip'],['#1F4E46','Lục cổ'],['#E8E2D4','Ngà']],
+    tagline:'Mỗi mặt mũ là một bức tranh <em>sơn mài</em> vẽ tay, không chiếc nào lặp lại.',
+    desc:'Bảy mươi hai giờ, chín lớp sơn và một đôi tay đủ kiên nhẫn để biết khi nào nên dừng lại.',
+    quote:'Bảy mươi hai giờ cho một mặt sơn mài.',
+    edTitle:'Thủ công không vội được.',
+    edDesc:'Mũ Sơn Mài Hoàng Gia đi qua nhiều lớp nền, nhiều lần hong khô và những nét vẽ tay cuối cùng. Vì thế không có hai chiếc giống hệt nhau — đó là điều làm nên giá trị của nó.',
+    hl:[['Sơn mài vẽ tay từng chiếc.','Chín lớp sơn phủ và hoàn thiện thủ công, mỗi mặt mũ là một bản duy nhất.'],
+        ['Dáng 3/4 quen thuộc.','Phom nhẹ, ôm đầu và phù hợp cho những chặng di chuyển trong phố.']],
+    shape:'Mũ bảo hiểm dáng 3/4, phom nhẹ với mặt sơn mài vẽ tay làm điểm nhấn.',
+    material:'Vỏ composite phủ sơn mài thủ công — nên lau khô và tránh va đập mạnh lên bề mặt vẽ.'
+  },
+  'raffia-sun': {
+    cat:'Nón thời trang · Raffia', crumbCat:'Nón thời trang',
+    name:'Nón Vành Raffia Sun', sku:'P1RF-VS1', variant:'Vàng nắng',
+    price:'1.650.000đ', img:'img-v4/pr-raffia-sun.png', code:'P1RF',
+    colors:[['#D9C89A','Vàng nắng'],['#EFE6D6','Kem sữa']],
+    tagline:'Sợi <em>raffia</em> tự nhiên, đan tay từng vòng — nhẹ, thoáng và không chiếc nào giống hệt nhau.',
+    desc:'Nón vành rộng cho những ngày nắng, đủ mềm để gấp gọn mang theo và đủ dáng để đội đi biển hay đi phố.',
+    quote:'Đan tay từng vòng, không vòng nào giống nhau.',
+    edTitle:'Nhẹ như một ngày hè.',
+    edDesc:'Raffia là sợi tự nhiên, nên mỗi cuộn có màu và độ bóng riêng. Chính sự không đồng đều đó tạo nên chiều sâu cho bề mặt và khiến mỗi chiếc nón mang một nhịp thở khác nhau.',
+    hl:[['Raffia đan tay.','Sợi tự nhiên, nhẹ và thoáng — dễ mang theo trong những chuyến đi ngắn.'],
+        ['Vành rộng che nắng.','Dáng vành đủ rộng để che nắng mà vẫn giữ được nét thanh lịch.']],
+    shape:'Nón vành rộng dáng bucket mềm, có nơ trang trí ở thân nón.',
+    material:'Sợi raffia tự nhiên đan tay — nên tránh làm ướt và giữ phom khi cất giữ.'
+  },
+  'classic': {
+    cat:'Mũ bảo hiểm · Classic', crumbCat:'Mũ bảo hiểm',
+    name:'Mũ 3/4 Classic', sku:'P4CL-TR1', variant:'Trắng',
+    price:'1.280.000đ', img:'img-v4/pr-helmet-white.png', code:'P4CL',
+    colors:[['#F2F2F2','Trắng'],['#2E2E2E','Than chì']],
+    tagline:'Phom <em>3/4 kinh điển</em> với kính visor — nhẹ, gọn và đủ chỉn chu cho mỗi ngày.',
+    desc:'Dáng mũ quen thuộc nhất của Nón Sơn: nhẹ, ôm đầu và dễ đi cùng mọi bộ đồ đi làm.',
+    quote:'An toàn không cần tách khỏi cái đẹp.',
+    edTitle:'Quen thuộc vì luôn vừa vặn.',
+    edDesc:'Mũ 3/4 Classic giữ đúng những gì cần có: phom nhẹ, kính visor che gió và lớp lót thoáng. Không thêm gì thừa, cũng không bớt đi điều gì quan trọng.',
+    hl:[['Phom nhẹ, ôm đầu.','Trọng lượng thấp giúp đội lâu không mỏi trong những chặng di chuyển dài.'],
+        ['Kính visor che gió.','Kính trong giúp giảm gió và bụi mà vẫn giữ tầm nhìn rõ ràng.']],
+    shape:'Mũ bảo hiểm dáng 3/4 cổ điển, có kính visor gập.',
+    material:'Vỏ nhựa ABS đạt chuẩn QCVN, lót trong thoáng khí và tháo giặt được.'
+  },
+  'phot-heritage': {
+    cat:'Nón thời trang · Dệt thủ công', crumbCat:'Nón thời trang',
+    name:'Nón Phớt Heritage', sku:'P2DT-DM1', variant:'Đỏ mận',
+    price:'980.000đ', img:'img-v4/pr-fedora-burgundy.png', code:'P2DT',
+    colors:[['#7A1E36','Đỏ mận'],['#1C2233','Xanh đen']],
+    tagline:'Một sắc <em>đỏ mận</em> trầm trên phom fedora cổ điển — đủ nổi để được nhớ.',
+    desc:'Phom phớt dệt thủ công, nhẹ hơn nón da và dễ đội quanh năm.',
+    quote:'Đủ nổi bật để được nhớ, đủ kín để đi cùng mọi thứ.',
+    edTitle:'Một sắc đỏ biết tiết chế.',
+    edDesc:'Đỏ mận là gam màu khó: đậm hơn một chút thì nặng, nhạt hơn một chút thì nhạt nhoà. Phiên bản này dừng đúng ở giữa, nên hợp cả với áo khoác tối màu lẫn sơ mi sáng.',
+    hl:[['Dệt thủ công.','Từng vòng dệt tay tạo bề mặt có chiều sâu, nhẹ và thoáng hơn nón da.'],
+        ['Phom fedora cổ điển.','Chóp lõm và vành vừa — dáng nón dễ đội, không kén khuôn mặt.']],
+    shape:'Nón phớt dáng fedora, chóp lõm với vành vừa và dải băng cùng tông.',
+    material:'Sợi dệt thủ công — nhẹ, thoáng, nên giữ phom khi cất và tránh đè nặng.'
+  },
+  'classic-trang': {
+    cat:'Mũ bảo hiểm · Classic', crumbCat:'Mũ bảo hiểm',
+    name:'Mũ 3/4 Classic Trắng', sku:'P4CL-TR2', variant:'Trắng ngà',
+    price:'1.280.000đ', img:'img-v4/bs-1.png', code:'P4CL',
+    colors:[['#F2F2F2','Trắng ngà'],['#2E2E2E','Than chì']],
+    tagline:'Sắc <em>trắng ngà</em> sáng và sạch — dáng mũ được chọn nhiều nhất tại showroom.',
+    desc:'Phom nhẹ, dễ phối và luôn nằm trong nhóm bán chạy nhất của Nón Sơn.',
+    quote:'Được chọn nhiều nhất vì lý do đơn giản.',
+    edTitle:'Bán chạy vì dễ đội.',
+    edDesc:'Không hoa văn, không chi tiết thừa. Chiếc mũ này được chọn nhiều nhất đơn giản vì nó nhẹ, sáng màu và đi được với gần như mọi bộ đồ.',
+    hl:[['Phom nhẹ mỗi ngày.','Trọng lượng thấp, đội lâu không mỏi kể cả khi di chuyển nhiều.'],
+        ['Sắc trắng dễ phối.','Gam trắng ngà sáng nhưng không chói, hợp cả đồ công sở lẫn đồ thường ngày.']],
+    shape:'Mũ bảo hiểm dáng 3/4, phom nhẹ với sắc trắng ngà.',
+    material:'Vỏ nhựa ABS đạt chuẩn QCVN, lót trong thoáng khí và tháo giặt được.'
+  },
+  'classic-xanhden': {
+    cat:'Mũ bảo hiểm · Classic', crumbCat:'Mũ bảo hiểm',
+    name:'Mũ 3/4 Classic Xanh đen', sku:'P4CL-XD1', variant:'Xanh đen',
+    price:'1.280.000đ', img:'img-v4/bs-2.png', code:'P4CL',
+    colors:[['#1C2233','Xanh đen'],['#F2F2F2','Trắng ngà']],
+    tagline:'Gam <em>xanh đen</em> kín đáo — sắc nhất khi ánh sáng chạm vào bề mặt.',
+    desc:'Cùng phom 3/4 quen thuộc, đổi sang một sắc tối sâu và ít bám bụi hơn.',
+    quote:'Kín đáo, sắc nét, không cần phô trương.',
+    edTitle:'Tối màu nhưng không nặng.',
+    edDesc:'Xanh đen là lựa chọn cho người thích sự kín đáo: đủ tối để không bắt mắt, nhưng vẫn khác biệt với màu đen thuần khi ra nắng.',
+    hl:[['Sắc tối ít bám bụi.','Gam xanh đen giữ được vẻ sạch sẽ lâu hơn giữa nhịp di chuyển trong phố.'],
+        ['Phom 3/4 quen thuộc.','Vẫn là dáng mũ nhẹ và ôm đầu đã quen, chỉ khác ở lớp màu.']],
+    shape:'Mũ bảo hiểm dáng 3/4, phom nhẹ với sắc xanh đen sâu.',
+    material:'Vỏ nhựa ABS đạt chuẩn QCVN, lót trong thoáng khí và tháo giặt được.'
+  },
+  'hoa-tiet': {
+    cat:'Mũ bảo hiểm · Classic', crumbCat:'Mũ bảo hiểm',
+    name:'Mũ 3/4 Hoạ Tiết', sku:'P4CL-HT1', variant:'Đen hoạ tiết',
+    price:'1.480.000đ', img:'img-v4/bs-4.png', code:'P4CL',
+    colors:[['#1A1A1A','Đen hoạ tiết'],['#F2F2F2','Trắng ngà']],
+    tagline:'<em>Hoạ tiết in chìm</em> chỉ hiện rõ khi nhìn gần — một chi tiết dành cho người để ý.',
+    desc:'Vẫn là phom 3/4 nhẹ quen thuộc, thêm một lớp hoạ tiết in chìm trên nền đen.',
+    quote:'Một chi tiết dành cho người để ý.',
+    edTitle:'Nổi bật ở khoảng cách gần.',
+    edDesc:'Từ xa đây chỉ là một chiếc mũ đen. Đến gần mới thấy lớp hoạ tiết in chìm chạy khắp bề mặt — cách gây chú ý mà không cần lớn tiếng.',
+    hl:[['Hoạ tiết in chìm.','Lớp hoạ tiết cùng tông, chỉ lộ ra khi ánh sáng chiếu nghiêng.'],
+        ['Phom nhẹ mỗi ngày.','Giữ nguyên trọng lượng và độ ôm của dòng Classic.']],
+    shape:'Mũ bảo hiểm dáng 3/4 nền đen với hoạ tiết in chìm cùng tông.',
+    material:'Vỏ nhựa ABS đạt chuẩn QCVN, lót trong thoáng khí và tháo giặt được.'
+  }
+};
+
+(function(){
+  var P = window.NS_PRODUCTS;
+  var id = new URLSearchParams(location.search).get('p');
+  if (!id || !P[id]) id = 'da-cuu';
+  var p = P[id];
+  var q = function(s){ return document.querySelector(s); };
+
+  document.title = p.name + ' — Nón Sơn';
+  q('.crumb [aria-current]').textContent = p.name;
+  q('.crumb a:nth-of-type(2)').textContent = p.crumbCat;
+  q('.info__eyebrow').textContent = p.cat;
+  q('.info__h1').textContent = p.name;
+  q('.info__sku').textContent = 'Mã kỹ thuật: ' + p.sku + ' · Phiên bản màu ' + p.variant;
+  q('.info__price b').textContent = p.price;
+  q('.info__tagline').innerHTML = p.tagline;
+  q('.info__desc').textContent = p.desc;
+  q('.gallery__stage img').src = p.img;
+  q('.gallery__stage img').alt = p.name;
+
+  /* bảng màu */
+  q('#colorName').textContent = p.colors[0][1];
+  q('#swatches').innerHTML = p.colors.map(function(c, i){
+    return '<button class="sw' + (i === 0 ? ' sw--on' : '') + '"' +
+      (i === 0 ? '' : ' style="background:' + c[0] + '"') +
+      ' data-n="' + c[1] + '" aria-pressed="' + (i === 0) + '" aria-label="' + c[1] + '"></button>';
+  }).join('');
+  /* ô màu đầu tiên dùng viền kép của Figma, nên đặt nền bằng biến riêng */
+  var first = q('#swatches .sw--on');
+  if (first) first.style.background = p.colors[0][0];
+
+  /* editorial */
+  q('.editorial__quote').textContent = p.quote;
+  q('.editorial__panel h2').textContent = p.edTitle;
+  q('.editorial__panel p').textContent = p.edDesc;
+  q('.editorial__code b').textContent = p.code;
+
+  /* điểm đáng chú ý — mục 3 là hướng dẫn chung, giữ nguyên */
+  var items = document.querySelectorAll('.hl__item');
+  p.hl.forEach(function(h, i){
+    items[i].querySelector('h3').textContent = h[0];
+    items[i].querySelector('p').textContent = h[1];
+  });
+
+  /* thông số — 2 dòng đầu theo sản phẩm, 3 dòng sau là chính sách chung */
+  var rows = document.querySelectorAll('.specs__row > p');
+  rows[0].textContent = p.shape;
+  rows[1].textContent = p.material;
+  q('.specs__l p').textContent = 'Mã ' + p.sku + ' được giữ để đồng bộ kho và showroom; tên ' +
+    p.name.split(' ').slice(-1)[0] + ' giúp bạn dễ nhận biết và ghi nhớ sản phẩm.';
+})();
+</script>
+
+<script>
+/* Khung Figma rộng 1920px. Dùng `zoom` (reflow thật) chứ không phải
+   transform: scale — nhờ đó position:sticky của cột thông tin chạy đúng. */
+(function(){
+  var stage = document.getElementById('stage');
+  var canZoom = window.CSS && CSS.supports && CSS.supports('zoom', '0.5');
+  var FLUID_BELOW = 1201;
+
+  function layout(){
+    var w = window.innerWidth;
+    var fluid = w < FLUID_BELOW;
+    document.documentElement.classList.toggle('fluid', fluid);
+
+    if (!canZoom){
+      stage.style.transform = 'scale(' + (w / 1920) + ')';
+      stage.style.position  = 'absolute';
+      stage.style.transformOrigin = '0 0';
+      document.body.style.height = Math.round(stage.offsetHeight * (w / 1920)) + 'px';
+      return;
+    }
+    if (!fluid) stage.style.zoom = w / 1920;
+  }
+
+  var hd = document.getElementById('stickyHd');
+  function onScroll(){
+    if (hd) hd.classList.toggle('on', window.scrollY > 220);
+  }
+  addEventListener('scroll', onScroll, { passive: true });
+  layout(); onScroll();
+  addEventListener('resize', function(){ layout(); onScroll(); });
+  addEventListener('load', layout);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(layout);
+})();
+
+/* Chọn màu / chọn size / lưu sản phẩm / giỏ hàng / về đầu trang */
+(function(){
+  var swWrap = document.getElementById('swatches');
+  if (swWrap) swWrap.addEventListener('click', function(e){
+    var b = e.target.closest('.sw'); if (!b) return;
+    swWrap.querySelectorAll('.sw').forEach(function(x){ x.setAttribute('aria-pressed', 'false'); });
+    b.setAttribute('aria-pressed', 'true');
+    document.getElementById('colorName').textContent = b.dataset.n;
+  });
+
+  var szWrap = document.getElementById('sizes');
+  if (szWrap) szWrap.addEventListener('click', function(e){
+    var b = e.target.closest('.size'); if (!b) return;
+    szWrap.querySelectorAll('.size').forEach(function(x){ x.setAttribute('aria-pressed', 'false'); });
+    b.setAttribute('aria-pressed', 'true');
+  });
+
+  var wish = document.querySelector('.cta__wish');
+  if (wish) wish.addEventListener('click', function(){
+    wish.setAttribute('aria-pressed', wish.getAttribute('aria-pressed') === 'true' ? 'false' : 'true');
+  });
+
+  document.querySelectorAll('.viewtoggle button').forEach(function(b){
+    b.addEventListener('click', function(){
+      document.querySelectorAll('.viewtoggle button').forEach(function(x){ x.setAttribute('aria-pressed', 'false'); });
+      b.setAttribute('aria-pressed', 'true');
+    });
+  });
+
+  var top = document.getElementById('toTop');
+  if (top) top.addEventListener('click', function(){ window.scrollTo({ top: 0, behavior: 'smooth' }); });
+
+  /* badge giỏ hàng +1, chỉ một lần */
+  var badges = [].slice.call(document.querySelectorAll('.cnt'));
+  var add = document.getElementById('addToCart');
+  if (add && badges.length){
+    var n = parseInt(badges[0].textContent, 10) || 0;
+    add.addEventListener('click', function(){
+      if (add.dataset.added) return;
+      add.dataset.added = '1';
+      n++;
+      badges.forEach(function(b){
+        b.textContent = n;
+        b.classList.add('pop');
+        setTimeout(function(){ b.classList.remove('pop'); }, 380);
+      });
+    });
+  }
+})();
+
+/* animate-text · short-slide-right (pixel-point/animate-text)
+   Thông số đã nhân runtime.speed_multiplier 0.72 như ở trang chủ. */
+(function(){
+  var EASE = 'cubic-bezier(0.2, 0.8, 0.2, 1)';
+  var TITLE = { duration: 374, x_from: -24, blur_from: 1.2 };
+  var WORD  = { duration: 151, step: 66, from: 0, to: 1 };
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  var titles = [].slice.call(document.querySelectorAll(
+    '.info__h1, .editorial__panel h2, .hl__head h2, .specs__l h2, .sizeband h2'));
+  if (!titles.length) return;
+
+  function split(el){
+    var words = [];
+    [].slice.call(el.childNodes).forEach(function(node){
+      if (node.nodeType !== 3 || !node.nodeValue) return;
+      var frag = document.createDocumentFragment();
+      node.nodeValue.split(/(\s+)/).forEach(function(part){
+        if (!part) return;
+        var sp = document.createElement('span');
+        sp.className = 'text-animation-unit';
+        sp.textContent = part;
+        if (!/^\s+$/.test(part)) words.push(sp);
+        frag.appendChild(sp);
+      });
+      node.parentNode.replaceChild(frag, node);
+    });
+    return words;
+  }
+
+  function play(el){
+    el.animate(
+      [{ transform: 'translate3d(' + TITLE.x_from + 'px,0,0)', filter: 'blur(' + TITLE.blur_from + 'px)' },
+       { transform: 'translate3d(0,0,0)', filter: 'blur(0px)' }],
+      { duration: TITLE.duration, easing: EASE, fill: 'forwards' });
+    el.__words.forEach(function(w, i){
+      w.animate([{ opacity: WORD.from }, { opacity: WORD.to }],
+        { duration: WORD.duration, delay: i * WORD.step, easing: EASE, fill: 'forwards' });
+    });
+  }
+
+  var pending = [];
+  titles.forEach(function(el){
+    el.classList.add('text-animation-title');
+    var words = split(el);
+    if (!words.length) return;
+    el.__words = words;
+    el.style.transform = 'translate3d(' + TITLE.x_from + 'px,0,0)';
+    el.style.filter = 'blur(' + TITLE.blur_from + 'px)';
+    words.forEach(function(w){ w.style.opacity = WORD.from; });
+    pending.push(el);
+  });
+
+  function check(){
+    for (var i = pending.length - 1; i >= 0; i--){
+      var el = pending[i], r = el.getBoundingClientRect();
+      if (r.top < window.innerHeight * 0.92 && r.bottom > 0){ play(el); pending.splice(i, 1); }
+    }
+  }
+  addEventListener('scroll', check, { passive: true });
+  addEventListener('resize', check);
+  addEventListener('load', check);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(check);
+  var t0 = performance.now();
+  (function settle(){ check(); if (pending.length && performance.now() - t0 < 3000) requestAnimationFrame(settle); })();
+  var backstop = setInterval(function(){
+    check();
+    if (!pending.length){ clearInterval(backstop); removeEventListener('scroll', check); removeEventListener('resize', check); }
+  }, 200);
+})();
+
+/* Cursor follower */
+(function(){
+  if (!matchMedia('(pointer: fine)').matches) return;
+  var DOT = 0.2, RING = 0.1;
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches){ DOT = 1; RING = 1; }
+
+  var root = document.createElement('div');
+  root.className = 'cursor-follow';
+  root.setAttribute('aria-hidden', 'true');
+  root.innerHTML = '<i class="cf-dot"></i><i class="cf-ring"></i>';
+  document.body.appendChild(root);
+  document.documentElement.classList.add('has-cursor');
+
+  var dot = root.querySelector('.cf-dot'), ring = root.querySelector('.cf-ring');
+  var m = { x: innerWidth / 2, y: innerHeight / 2 };
+  var d = { x: m.x, y: m.y }, r = { x: m.x, y: m.y }, seen = false;
+
+  addEventListener('mousemove', function(e){
+    m.x = e.clientX; m.y = e.clientY;
+    if (!seen){ seen = true; d.x = r.x = m.x; d.y = r.y = m.y; root.style.opacity = 1; }
+  }, { passive: true });
+
+  var HOVER = 'a, button, input, textarea, select, img';
+  addEventListener('mouseover', function(e){
+    var t = e.target;
+    root.classList.toggle('is-hover', !!(t && t.closest && t.closest(HOVER)));
+  }, { passive: true });
+  document.addEventListener('mouseleave', function(){ root.style.opacity = 0; });
+  document.addEventListener('mouseenter', function(){ if (seen) root.style.opacity = 1; });
+
+  function lerp(a, b, f){ return a + (b - a) * f; }
+  (function frame(){
+    d.x = lerp(d.x, m.x, DOT);  d.y = lerp(d.y, m.y, DOT);
+    r.x = lerp(r.x, m.x, RING); r.y = lerp(r.y, m.y, RING);
+    dot.style.transform  = 'translate3d(' + d.x + 'px,' + d.y + 'px,0)';
+    ring.style.transform = 'translate3d(' + r.x + 'px,' + r.y + 'px,0)';
+    requestAnimationFrame(frame);
+  })();
+})();
+</script>
+</body>
+</html>

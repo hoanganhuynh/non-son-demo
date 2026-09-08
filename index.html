@@ -163,6 +163,7 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
 /* ───────── Product card (18:10682 / 199:7557) ───────── */
 .pgrid{display:flex;gap:16px;align-items:flex-start;justify-content:center;padding-bottom:40px;width:100%}
 .pcard{flex:1 0 0;min-width:0;display:flex;flex-direction:column;align-items:flex-start;position:relative}
+.pcard__link{position:absolute;inset:0;z-index:3}   /* phủ cả card để bấm đâu cũng mở PDP */
 .pmedia{position:relative;aspect-ratio:330/412.5;background:#fff;overflow:hidden;width:100%;
   display:flex;align-items:flex-end;justify-content:flex-end;padding:0 16px 8px}
 .pmedia--grey{background:#eee}
@@ -179,7 +180,7 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
 .ptag--gold{background:#a19071}
 .ptag--pink{background:#d11f70}
 /* CTA thêm vào giỏ — trượt lên từ mép dưới ảnh khi hover */
-.pcta{position:absolute;left:0;right:0;bottom:0;height:52px;background:#d11f70;color:#fff;
+.pcta{position:absolute;left:0;right:0;bottom:0;z-index:4;height:52px;background:#d11f70;color:#fff;
   display:flex;align-items:center;justify-content:center;
   font-weight:600;font-size:14px;letter-spacing:.893px;text-transform:uppercase;white-space:nowrap;
   transform:translateY(100%);opacity:0;
@@ -901,7 +902,7 @@ html.fluid .mood__img img{position:absolute;left:50%;top:50%;transform:translate
       </div>
       <div class="hero__cta">
         <button class="btn-fill">Thêm vào giỏ hàng</button>
-        <a class="btn-line" href="#">Chi tiết sản phẩm<img src="img-v4/ic-arrow-ne.svg" alt=""></a>
+        <a class="btn-line" href="pdp-v4.html?p=da-cuu">Chi tiết sản phẩm<img src="img-v4/ic-arrow-ne.svg" alt=""></a>
       </div>
     </div>
   </div>
@@ -978,6 +979,7 @@ html.fluid .mood__img img{position:absolute;left:50%;top:50%;transform:translate
 
   <div class="pgrid">
     <article class="pcard">
+        <a class="pcard__link" href="pdp-v4.html?p=sonmai-hoanggia" aria-label="Mũ Sơn Mài Hoàng Gia"></a>
       <div class="pmedia">
         <div class="pmedia__img"><img src="img-v4/pr-sonmai-hoanggia.png" alt="Mũ Sơn Mài Hoàng Gia họa tiết thủ công"></div>
         <span class="ptag ptag--gold">Mới</span>
@@ -991,6 +993,7 @@ html.fluid .mood__img img{position:absolute;left:50%;top:50%;transform:translate
       </div>
     </article>
     <article class="pcard">
+        <a class="pcard__link" href="pdp-v4.html?p=raffia-sun" aria-label="Nón Vành Raffia Sun"></a>
       <div class="pmedia">
         <div class="pmedia__img"><img src="img-v4/pr-raffia-sun.png" alt="Nón vành raffia màu cát có nơ"></div>
         <span class="ptag ptag--pink">Thủ công</span>
@@ -1004,6 +1007,7 @@ html.fluid .mood__img img{position:absolute;left:50%;top:50%;transform:translate
       </div>
     </article>
     <article class="pcard">
+        <a class="pcard__link" href="pdp-v4.html?p=classic" aria-label="Mũ 3/4 Classic"></a>
       <div class="pmedia">
         <div class="pmedia__img"><img src="img-v4/pr-helmet-white.png" alt="Mũ bảo hiểm 3/4 màu trắng"></div>
         <span class="ptag ptag--gold">Mới</span>
@@ -1017,6 +1021,7 @@ html.fluid .mood__img img{position:absolute;left:50%;top:50%;transform:translate
       </div>
     </article>
     <article class="pcard">
+        <a class="pcard__link" href="pdp-v4.html?p=phot-heritage" aria-label="Nón Phớt Heritage"></a>
       <div class="pmedia">
         <div class="pmedia__img"><img src="img-v4/pr-fedora-burgundy.png" alt="Nón phớt dệt màu đỏ mận"></div>
         <span class="ptag ptag--gold">Mới</span>
@@ -1056,6 +1061,7 @@ html.fluid .mood__img img{position:absolute;left:50%;top:50%;transform:translate
 
   <div class="pgrid">
     <article class="pcard">
+        <a class="pcard__link" href="pdp-v4.html?p=classic-trang" aria-label="Mũ 3/4 Classic Trắng"></a>
       <div class="pmedia pmedia--grey">
         <div class="pmedia__img pmedia__img--fit"><img class="sq82" src="img-v4/bs-1.png" alt="Mũ 3/4 Classic Trắng">
         </div>
@@ -1070,6 +1076,7 @@ html.fluid .mood__img img{position:absolute;left:50%;top:50%;transform:translate
       </div>
     </article>
     <article class="pcard">
+        <a class="pcard__link" href="pdp-v4.html?p=classic-xanhden" aria-label="Mũ 3/4 Classic Xanh đen"></a>
       <div class="pmedia pmedia--grey">
         <div class="pmedia__img pmedia__img--fit"><img class="sq96" src="img-v4/bs-2.png" alt="Mũ 3/4 Classic Xanh đen">
         </div>
@@ -1084,6 +1091,7 @@ html.fluid .mood__img img{position:absolute;left:50%;top:50%;transform:translate
       </div>
     </article>
     <article class="pcard">
+        <a class="pcard__link" href="pdp-v4.html?p=classic" aria-label="Mũ 3/4 Classic"></a>
       <div class="pmedia pmedia--grey">
         <div class="pmedia__img"><img src="img-v4/bs-3.png" alt="Mũ bảo hiểm 3/4 màu trắng"></div>
         <span class="ptag ptag--pink">Bán chạy</span>
@@ -1097,6 +1105,7 @@ html.fluid .mood__img img{position:absolute;left:50%;top:50%;transform:translate
       </div>
     </article>
     <article class="pcard">
+        <a class="pcard__link" href="pdp-v4.html?p=hoa-tiet" aria-label="Mũ 3/4 Hoạ tiết"></a>
       <div class="pmedia pmedia--grey">
         <div class="pmedia__img pmedia__img--fit"><img class="sq97" src="img-v4/bs-4.png" alt="Mũ 3/4 Hoạ tiết">
         </div>
@@ -1193,7 +1202,7 @@ html.fluid .mood__img img{position:absolute;left:50%;top:50%;transform:translate
         <div class="mood__kicker">Mũ bảo hiểm · Sơn mài</div>
         <h3 class="ns mood__h3">Mũ Sơn Mài Hoàng Gia</h3>
         <p class="mood__p">Vẽ tay thủ công · Dáng 3/4</p>
-        <button class="mood__btn2">MUA NGAY</button>
+        <button class="mood__btn2" data-pid="sonmai-hoanggia">MUA NGAY</button>
       </div>
     </div>
   </div>
@@ -1359,16 +1368,16 @@ html.fluid .mood__img img{position:absolute;left:50%;top:50%;transform:translate
    ba trạng thái còn lại dựng theo đúng bộ màu thương hiệu. */
 (function(){
   var MOODS = [
-    {n:'Đỏ son',     bg:'#d11f70', fg:'#f4f1ea', dim:'rgba(244,241,234,.7)', kick:'#ffffff',
+    {n:'Đỏ son', pid:'sonmai-hoanggia',     bg:'#d11f70', fg:'#f4f1ea', dim:'rgba(244,241,234,.7)', kick:'#ffffff',
      btnBg:'#ffffff', btnFg:'#d11f70', row:'#ffe4f1', img:'img-v4/mood-sonmai.png',
      cat:'Mũ bảo hiểm · Sơn mài', name:'Mũ Sơn Mài Hoàng Gia', meta:'Vẽ tay thủ công · Dáng 3/4'},
-    {n:'Kem sữa',    bg:'#f4f1ea', fg:'#121212', dim:'rgba(18,18,18,.62)',   kick:'rgba(18,18,18,.72)',
+    {n:'Kem sữa', pid:'classic-trang',    bg:'#f4f1ea', fg:'#121212', dim:'rgba(18,18,18,.62)',   kick:'rgba(18,18,18,.72)',
      btnBg:'#121212', btnFg:'#f4f1ea', row:'#f1ede4', img:'img-v4/w-everyday.png',
      cat:'Mũ bảo hiểm · Classic', name:'Mũ 3/4 Classic Trắng', meta:'Phom nhẹ · Kính visor'},
-    {n:'Charcoal',   bg:'#121212', fg:'#f4f1ea', dim:'rgba(244,241,234,.7)', kick:'#ffffff',
+    {n:'Charcoal', pid:'hoa-tiet',   bg:'#121212', fg:'#f4f1ea', dim:'rgba(244,241,234,.7)', kick:'#ffffff',
      btnBg:'#ffffff', btnFg:'#121212', row:'#e9e9e9', img:'img-v4/w-luxury.png',
      cat:'Mũ bảo hiểm · Classic', name:'Mũ 3/4 Hoạ tiết', meta:'Hoạ tiết in chìm · Phom nhẹ'},
-    {n:'Muted gold', bg:'#dcb46f', fg:'#121212', dim:'rgba(18,18,18,.62)',   kick:'rgba(18,18,18,.72)',
+    {n:'Muted gold', pid:'raffia-sun', bg:'#dcb46f', fg:'#121212', dim:'rgba(18,18,18,.62)',   kick:'rgba(18,18,18,.72)',
      btnBg:'#121212', btnFg:'#f4f1ea', row:'#f7efdd', img:'img-v4/pr-raffia-sun.png',
      cat:'Nón thời trang · Raffia', name:'Nón Vành Raffia Sun', meta:'Đan tay · Nhẹ và thoáng'}
   ];
@@ -1394,11 +1403,16 @@ html.fluid .mood__img img{position:absolute;left:50%;top:50%;transform:translate
     kick.textContent = m.cat;
     h3.textContent = m.name;   h3.style.color = m.fg;
     desc.textContent = m.meta; desc.style.color = m.dim;
+    cta.dataset.pid = m.pid;
     cta.style.background = m.btnBg;
     cta.style.color = m.btnFg;
     img.classList.add('swap');
     setTimeout(function(){ img.src = m.img; img.alt = m.name; img.classList.remove('swap'); }, 190);
   }
+
+  cta.addEventListener('click', function(){
+    if (cta.dataset.pid) location.href = 'pdp-v4.html?p=' + cta.dataset.pid;
+  });
 
   btns.forEach(function(b){
     b.setAttribute('aria-pressed', b.classList.contains('mood__btn--on'));

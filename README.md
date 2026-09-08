@@ -5,8 +5,9 @@ khung gốc 1600px, scale theo bề rộng cửa sổ bằng CSS `zoom`.
 
 ## Nội dung
 
-- `index.html` — toàn bộ trang (HTML + CSS + JS trong một file)
-- `img-v4/` — asset xuất trực tiếp từ Figma (ảnh sản phẩm, ảnh bài viết, logo, icon SVG)
+- `index.html` — trang chủ
+- `pdp-v4.html` — trang chi tiết sản phẩm, chạy theo `?p=<id>`
+- `img-v4/`, `img-pdp/` — asset xuất trực tiếp từ Figma
 
 ## Đặc điểm
 
@@ -30,3 +31,16 @@ Mở http://localhost:8788
 ## Deploy
 
 Trang tĩnh thuần, không cần build. Vercel nhận `index.html` ở thư mục gốc.
+
+## Trang chi tiết sản phẩm
+
+Dựng 1:1 từ Figma node `20:13983` (khung gốc **1920px**, khác trang chủ 1600px).
+Trang chạy theo `?p=<id>` — bấm sản phẩm nào ở trang chủ thì mở đúng PDP của
+sản phẩm đó. Danh mục nằm trong `window.NS_PRODUCTS`:
+
+`da-cuu` · `sonmai-hoanggia` · `raffia-sun` · `classic` · `phot-heritage`
+· `classic-trang` · `classic-xanhden` · `hoa-tiet`
+
+Figma chỉ mô tả *Nón Phớt Da Cừu Heritage*; nội dung các sản phẩm còn lại được
+soạn dựa trên thông tin ở trang chủ. Các mục chính sách cửa hàng (kích thước,
+bảo hành, giao nhận) giữ nguyên cho mọi sản phẩm.
