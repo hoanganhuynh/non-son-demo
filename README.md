@@ -44,3 +44,17 @@ sản phẩm đó. Danh mục nằm trong `window.NS_PRODUCTS`:
 Figma chỉ mô tả *Nón Phớt Da Cừu Heritage*; nội dung các sản phẩm còn lại được
 soạn dựa trên thông tin ở trang chủ. Các mục chính sách cửa hàng (kích thước,
 bảo hành, giao nhận) giữ nguyên cho mọi sản phẩm.
+
+## Xem 3D (turntable)
+
+Chỉ *Nón Phớt Da Cừu Heritage* (`?p=da-cuu`) có bản 3D. Bấm **3D VIEW** để
+chuyển sang chế độ xoay, kéo ngang để đổi góc; kéo hết bề ngang khung ảnh
+là trọn một vòng 360°.
+
+Nguồn là `3d.mp4` (640×640, 24fps, 97 frame) nhưng video chỉ có **một
+keyframe**, nên seek theo `currentTime` phải giải mã lại từ đầu mỗi lần —
+rất giật. Vì vậy frame được tách sẵn thành 97 ảnh WebP trong `img-pdp/3d/`
+(**0,75 MB**, ~7,9 KB/frame) rồi vẽ lên canvas. Frame ghép trên nền
+`#fbfaf7` để trùng nền trang.
+
+Sản phẩm chưa có bản 3D thì bấm nút sẽ hiện popup và mời sang trang da cừu.

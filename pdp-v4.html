@@ -58,7 +58,9 @@ main{padding-top:9px}   /* Figma: header cao 78, Main bắt đầu ở y=87 */
 .pdp{display:flex;gap:15px;align-items:flex-start;justify-content:center;padding:0 128px 144px}
 .gallery{width:937px;flex:none;display:flex;flex-direction:column;gap:16px;align-items:center;overflow:hidden}
 .gallery__stage{position:relative;width:937px;height:784px;overflow:hidden}
-.gallery__stage img{position:absolute;height:119.52%;left:-.03%;top:-9.77%;width:100%}
+/* con trực tiếp: nếu để selector hậu duệ thì nó bắt luôn <img> icon bên
+   trong nút 3D và đẩy icon ra khỏi pill */
+.gallery__stage>img{position:absolute;height:119.52%;left:-.03%;top:-9.77%;width:100%}
 .pill3d{position:absolute;left:calc(50% + .26px);transform:translateX(-50%);top:685.6px;
   background:rgba(0,0,0,.08);padding:12px 16px;border-radius:99px;display:flex;align-items:center;gap:10px;
   transition:background-color .22s ease}
@@ -247,6 +249,55 @@ html.has-cursor,html.has-cursor *{cursor:none!important}
   *{transition-duration:.01ms!important}
 }
 
+/* ══ Trình xem 3D (turntable) ══
+   Video 3d.mp4 chỉ có 1 keyframe nên scrub currentTime sẽ phải giải mã lại
+   từ đầu mỗi lần seek. Vì vậy tách sẵn 97 frame ra WebP (0.75MB) và vẽ lên
+   canvas — kéo ngang để xoay, không phụ thuộc tốc độ seek của trình duyệt. */
+.v3d{position:absolute;left:-.03%;top:-9.77%;width:100%;height:119.52%;
+  display:none;z-index:2;touch-action:pan-y}
+.v3d.on{display:block}
+.v3d canvas{width:100%;height:100%;display:block}
+.v3d__hint{position:absolute;left:50%;bottom:14%;transform:translateX(-50%);
+  display:flex;align-items:center;gap:8px;padding:9px 15px;border-radius:99px;
+  background:rgba(0,0,0,.08);font-size:12px;letter-spacing:1.2px;text-transform:uppercase;color:#111;
+  white-space:nowrap;transition:opacity .3s ease}
+.v3d__hint.gone{opacity:0}
+.v3d__load{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  flex-direction:column;gap:12px;font-size:12px;letter-spacing:1.4px;text-transform:uppercase;color:#766f67}
+.v3d__bar{width:132px;height:2px;background:rgba(18,18,18,.12);overflow:hidden}
+.v3d__bar i{display:block;height:100%;width:0;background:#d11f70;transition:width .18s linear}
+.pill3d.on{background:#121212}
+.pill3d.on span{color:#f4f1ea}
+.pill3d.on img{filter:brightness(0) invert(1)}
+
+/* ══ Popup: sản phẩm chưa có 3D ══ */
+.modal[hidden]{display:none}
+.modal{position:fixed;inset:0;z-index:400;display:flex;align-items:center;justify-content:center;padding:24px}
+.modal__scrim{position:absolute;inset:0;background:rgba(18,18,18,.55);backdrop-filter:blur(3px);
+  opacity:0;transition:opacity .3s ease}
+.modal.in .modal__scrim{opacity:1}
+.modal__card{position:relative;width:min(460px,100%);background:#fbfaf7;padding:36px 36px 30px;
+  border-top:3px solid #d11f70;transform:translateY(14px) scale(.98);opacity:0;
+  transition:transform .38s cubic-bezier(.22,.9,.24,1),opacity .28s ease}
+.modal.in .modal__card{transform:none;opacity:1}
+.modal__x{position:absolute;right:14px;top:12px;width:30px;height:30px;border-radius:999px;
+  font-size:20px;line-height:1;color:#766f67;transition:background-color .22s ease,color .22s ease}
+.modal__x:hover{background:rgba(18,18,18,.06);color:#121212}
+.modal__eyebrow{display:block;font-weight:600;font-size:12px;color:#d11f70;letter-spacing:2.4px;
+  text-transform:uppercase;margin-bottom:12px}
+.modal__card h3{font-family:Newsreader,Georgia,serif;font-weight:400;font-size:30px;color:#121212;
+  line-height:1.15;margin-bottom:12px}
+.modal__card p{font-size:14px;color:#766f67;line-height:1.5}
+.modal__card p b{color:#121212;font-weight:600}
+.modal__cta{display:flex;gap:10px;align-items:center;margin-top:24px;flex-wrap:wrap}
+.modal__go{flex:1 1 auto;min-height:48px;display:flex;align-items:center;justify-content:center;gap:8px;
+  background:#d11f70;color:#f4f1ea;font-weight:600;font-size:12px;letter-spacing:1.56px;text-transform:uppercase;
+  transition:background-color .22s ease,box-shadow .22s ease}
+.modal__go:hover{background:#b0155c;box-shadow:0 12px 26px -14px rgba(209,31,112,.85)}
+.modal__later{min-height:48px;padding:0 18px;font-size:12px;letter-spacing:1.2px;text-transform:uppercase;
+  color:#766f67;transition:color .22s ease}
+.modal__later:hover{color:#121212}
+
 /* ══════════════════════════════════════════════════════════════════
    RESPONSIVE — giống trang chủ: ≥1201px giữ khung 1920 và zoom;
    ≤1200px chuyển html.fluid, layout co giãn thật (1200·1024·768·480)
@@ -361,7 +412,12 @@ html.fluid .foot__top{height:auto}
   <div class="gallery">
     <div class="gallery__stage">
       <img src="img-pdp/hero-hat.png" alt="Nón Phớt Da Cừu Heritage">
-      <button class="pill3d"><img src="img-pdp/ic-3d.svg" alt=""><span>3D view</span></button>
+      <div class="v3d" id="v3d">
+        <canvas id="v3dCanvas" width="640" height="640"></canvas>
+        <div class="v3d__hint" id="v3dHint">↔ Kéo ngang để xoay</div>
+        <div class="v3d__load" id="v3dLoad" hidden>Đang tải bản 3D<div class="v3d__bar"><i id="v3dBar"></i></div></div>
+      </div>
+      <button class="pill3d" id="btn3d"><img src="img-pdp/ic-3d.svg" alt=""><span>3D view</span></button>
     </div>
     <div class="viewtoggle">
       <button aria-pressed="false">Model view</button>
@@ -541,6 +597,21 @@ html.fluid .foot__top{height:auto}
   </div>
 </footer>
 
+<!-- Popup: sản phẩm chưa có bản 3D -->
+<div class="modal" id="no3d" hidden>
+  <div class="modal__scrim" data-close></div>
+  <div class="modal__card" role="dialog" aria-modal="true" aria-labelledby="no3dTitle">
+    <button class="modal__x" data-close aria-label="Đóng">×</button>
+    <span class="modal__eyebrow">Xem 3D</span>
+    <h3 class="ns" id="no3dTitle">Sản phẩm này chưa có bản 3D.</h3>
+    <p>Hiện chỉ <b>Nón Phớt Da Cừu Heritage</b> có bản dựng 3D để xoay thử ở mọi góc. Những sản phẩm còn lại đang được chụp thêm.</p>
+    <div class="modal__cta">
+      <a class="modal__go" href="pdp-v4.html?p=da-cuu">Trải nghiệm 3D&nbsp;↗</a>
+      <button class="modal__later" data-close>Để sau</button>
+    </div>
+  </div>
+</div>
+
 </div><!-- /#stage -->
 
 <script>
@@ -556,6 +627,7 @@ window.NS_PRODUCTS = {
     cat:'Nón phớt · Da cừu cao cấp', crumbCat:'Nón da',
     name:'Nón Phớt Da Cừu Heritage', sku:'P2DA-NU2', variant:'Nâu',
     price:'10.000.000đ', img:'img-pdp/hero-hat.png', code:'P2DA',
+    frames3d:{ dir:'img-pdp/3d/', count:97 },
     colors:[['#765500','Màu nâu'],['#737373','Màu xám'],['#111','Màu đen']],
     tagline:'Một phom dáng kinh điển được kể lại bằng <em>da cừu</em> mềm và sắc nâu trầm.',
     desc:'Nón phớt Heritage dành cho những nhịp xuất hiện cần sự chỉn chu, với bề mặt da tạo cảm giác sang trọng và dễ phối.',
@@ -919,6 +991,142 @@ window.NS_PRODUCTS = {
     ring.style.transform = 'translate3d(' + r.x + 'px,' + r.y + 'px,0)';
     requestAnimationFrame(frame);
   })();
+})();
+</script>
+<script>
+/* ══════════════════════════════════════════════════════════════════
+   Trình xem 3D — turntable từ chuỗi WebP
+   3d.mp4 là một vòng quay 360° (97 frame @24fps). Video chỉ có duy nhất
+   1 keyframe nên seek theo currentTime rất chậm; vì vậy frame đã được
+   tách sẵn thành 97 ảnh WebP (~0.75MB) và vẽ lên canvas.
+   Kéo hết chiều ngang khung ảnh = đúng một vòng 360°.
+   ══════════════════════════════════════════════════════════════════ */
+(function(){
+  var P = window.NS_PRODUCTS;
+  var pid = new URLSearchParams(location.search).get('p');
+  if (!pid || !P[pid]) pid = 'da-cuu';
+  var spec = P[pid].frames3d;
+
+  var btn    = document.getElementById('btn3d');
+  var layer  = document.getElementById('v3d');
+  var canvas = document.getElementById('v3dCanvas');
+  var hint   = document.getElementById('v3dHint');
+  var load   = document.getElementById('v3dLoad');
+  var bar    = document.getElementById('v3dBar');
+  var still  = document.querySelector('.gallery__stage img');
+  var modal  = document.getElementById('no3d');
+  if (!btn) return;
+
+  /* ── popup cho sản phẩm chưa có 3D ── */
+  function openModal(){
+    modal.hidden = false;
+    requestAnimationFrame(function(){ modal.classList.add('in'); });
+    document.addEventListener('keydown', esc);
+  }
+  function closeModal(){
+    modal.classList.remove('in');
+    document.removeEventListener('keydown', esc);
+    setTimeout(function(){ modal.hidden = true; }, 300);
+  }
+  function esc(e){ if (e.key === 'Escape') closeModal(); }
+  modal.addEventListener('click', function(e){ if (e.target.closest('[data-close]')) closeModal(); });
+
+  if (!spec){
+    btn.addEventListener('click', openModal);
+    return;
+  }
+
+  /* ── trạng thái ── */
+  var ctx = canvas.getContext('2d');
+  var imgs = [], ready = false, loading = false;
+  var idx = 0, on = false;
+  var dragging = false, lastX = 0, vel = 0, raf = 0, moved = false;
+
+  function draw(){
+    var im = imgs[Math.round(idx) % spec.count];
+    if (!im || !im.complete) return;
+    ctx.clearRect(0, 0, 640, 640);
+    ctx.drawImage(im, 0, 0, 640, 640);
+  }
+  function mod(n, m){ return ((n % m) + m) % m; }
+
+  function preload(done){
+    if (loading) return; loading = true;
+    load.hidden = false;
+    var got = 0;
+    for (var i = 0; i < spec.count; i++){
+      (function(i){
+        var im = new Image();
+        im.onload = im.onerror = function(){
+          got++;
+          bar.style.width = Math.round(got / spec.count * 100) + '%';
+          if (got === spec.count){ ready = true; load.hidden = true; done(); }
+        };
+        im.src = spec.dir + 'f' + (i < 10 ? '0' + i : i) + '.webp';
+        imgs[i] = im;
+      })(i);
+    }
+  }
+
+  function enter(){
+    on = true;
+    layer.classList.add('on');
+    btn.classList.add('on');
+    still.style.visibility = 'hidden';
+    if (ready) draw(); else preload(draw);
+  }
+  function exit(){
+    on = false;
+    layer.classList.remove('on');
+    btn.classList.remove('on');
+    still.style.visibility = '';
+    cancelAnimationFrame(raf);
+  }
+
+  btn.addEventListener('click', function(){ on ? exit() : enter(); });
+
+  /* PRODUCT VIEW / MODEL VIEW cũng thoát khỏi chế độ 3D */
+  document.querySelectorAll('.viewtoggle button').forEach(function(b){
+    b.addEventListener('click', function(){ if (on) exit(); });
+  });
+
+  /* ── kéo để xoay ── */
+  function pxPerFrame(){
+    var w = canvas.getBoundingClientRect().width || 640;
+    return w / spec.count;               // kéo hết bề ngang = trọn 360°
+  }
+  function step(dx){
+    idx = mod(idx - dx / pxPerFrame(), spec.count);
+    draw();
+  }
+
+  canvas.addEventListener('pointerdown', function(e){
+    if (!ready) return;
+    dragging = true; moved = false; lastX = e.clientX; vel = 0;
+    cancelAnimationFrame(raf);
+    canvas.setPointerCapture(e.pointerId);
+    e.preventDefault();
+  });
+  canvas.addEventListener('pointermove', function(e){
+    if (!dragging) return;
+    var dx = e.clientX - lastX;
+    lastX = e.clientX;
+    if (Math.abs(dx) > 0){ moved = true; hint.classList.add('gone'); }
+    vel = dx;
+    step(dx);
+  });
+  function release(){
+    if (!dragging) return;
+    dragging = false;
+    (function glide(){                    /* quán tính, tắt dần */
+      vel *= 0.94;
+      if (Math.abs(vel) < 0.25) return;
+      step(vel);
+      raf = requestAnimationFrame(glide);
+    })();
+  }
+  canvas.addEventListener('pointerup', release);
+  canvas.addEventListener('pointercancel', release);
 })();
 </script>
 </body>

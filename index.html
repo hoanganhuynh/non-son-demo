@@ -427,6 +427,13 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
 .viewall:hover img{transform:scaleY(-1) translate(3px,-3px)}
 
 /* ── Card sản phẩm ── */
+/* ══ Card sản phẩm hiện ra lần lượt khi cuộn ══
+   Card nào lọt vào khung nhìn trong cùng một nhịp kiểm tra thì xếp hàng
+   và hiện so le 90ms một cái, thay vì bật ra cùng lúc.                */
+.pcard.rv-pre{opacity:0;transform:translateY(30px)}
+.pcard{transition:transform .62s cubic-bezier(.16,1,.3,1),opacity .62s cubic-bezier(.16,1,.3,1),
+  box-shadow .5s var(--e,cubic-bezier(.22,.9,.24,1)),border-color .5s}
+@media (prefers-reduced-motion:reduce){.pcard.rv-pre{opacity:1;transform:none}}
 .pcard{cursor:pointer}
 .pcard:hover{transform:translateY(-4px)}
 /* zoom trên wrapper, không phải trên <img>: mấy card bán chạy đã dùng
@@ -1372,13 +1379,13 @@ html.fluid .mood__img img{position:absolute;left:50%;top:50%;transform:translate
      btnBg:'#ffffff', btnFg:'#d11f70', row:'#ffe4f1', img:'img-v4/mood-sonmai.png',
      cat:'Mũ bảo hiểm · Sơn mài', name:'Mũ Sơn Mài Hoàng Gia', meta:'Vẽ tay thủ công · Dáng 3/4'},
     {n:'Kem sữa', pid:'classic-trang',    bg:'#f4f1ea', fg:'#121212', dim:'rgba(18,18,18,.62)',   kick:'rgba(18,18,18,.72)',
-     btnBg:'#121212', btnFg:'#f4f1ea', row:'#f1ede4', img:'img-v4/w-everyday.png',
+     btnBg:'#d11f70', btnFg:'#f4f1ea', row:'#f1ede4', img:'img-v4/w-everyday.png',
      cat:'Mũ bảo hiểm · Classic', name:'Mũ 3/4 Classic Trắng', meta:'Phom nhẹ · Kính visor'},
     {n:'Charcoal', pid:'hoa-tiet',   bg:'#121212', fg:'#f4f1ea', dim:'rgba(244,241,234,.7)', kick:'#ffffff',
      btnBg:'#ffffff', btnFg:'#121212', row:'#e9e9e9', img:'img-v4/w-luxury.png',
      cat:'Mũ bảo hiểm · Classic', name:'Mũ 3/4 Hoạ tiết', meta:'Hoạ tiết in chìm · Phom nhẹ'},
     {n:'Muted gold', pid:'raffia-sun', bg:'#dcb46f', fg:'#121212', dim:'rgba(18,18,18,.62)',   kick:'rgba(18,18,18,.72)',
-     btnBg:'#121212', btnFg:'#f4f1ea', row:'#f7efdd', img:'img-v4/pr-raffia-sun.png',
+     btnBg:'#d11f70', btnFg:'#f4f1ea', row:'#f7efdd', img:'img-v4/pr-raffia-sun.png',
      cat:'Nón thời trang · Raffia', name:'Nón Vành Raffia Sun', meta:'Đan tay · Nhẹ và thoáng'}
   ];
   var panel = document.querySelector('.mood__panel');
@@ -1646,6 +1653,42 @@ html.fluid .mood__img img{position:absolute;left:50%;top:50%;transform:translate
     ring.style.transform = 'translate3d(' + r.x + 'px,' + r.y + 'px,0)';
     requestAnimationFrame(frame);
   })();
+})();
+</script>
+<script>
+/* Hiện lần lượt các card sản phẩm khi cuộn tới.
+   Không dùng IntersectionObserver vì nó tính hình học theo toạ độ chưa
+   nhân CSS zoom — cùng lý do đã gặp ở phần animate-text. */
+(function(){
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var pending = [].slice.call(document.querySelectorAll('.pcard'));
+  if (!pending.length) return;
+  pending.forEach(function(c){ c.classList.add('rv-pre'); });
+
+  function check(){
+    var batch = [];
+    for (var i = pending.length - 1; i >= 0; i--){
+      var c = pending[i], r = c.getBoundingClientRect();
+      if (r.top < window.innerHeight * 0.9 && r.bottom > 0){
+        batch.unshift(c);            // giữ đúng thứ tự trái → phải
+        pending.splice(i, 1);
+      }
+    }
+    batch.forEach(function(c, k){
+      setTimeout(function(){ c.classList.remove('rv-pre'); }, k * 90);
+    });
+  }
+
+  addEventListener('scroll', check, { passive: true });
+  addEventListener('resize', check);
+  addEventListener('load', check);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(check);
+  var t0 = performance.now();
+  (function settle(){ check(); if (pending.length && performance.now() - t0 < 3000) requestAnimationFrame(settle); })();
+  var backstop = setInterval(function(){          /* chốt chặn, tự dọn khi xong */
+    check();
+    if (!pending.length){ clearInterval(backstop); removeEventListener('scroll', check); removeEventListener('resize', check); }
+  }, 200);
 })();
 </script>
 </body>
