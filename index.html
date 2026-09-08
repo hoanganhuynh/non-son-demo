@@ -479,6 +479,19 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
 .foot__col a:hover{color:#fff}
 .foot__brand .logo:hover{opacity:.8}
 
+/* ══ animate-text · short-slide-right ══
+   Spec: pixel-point/animate-text (renderer shared-slide-opacity-stage).
+   Cả cụm chữ trượt vào từ trái bằng MỘT transform duy nhất; thứ tự từ
+   chỉ được kể qua opacity so le. Chạy bằng Web Animations API, không
+   thêm thư viện. Yêu cầu sân khấu lấy từ showcase.stage của spec.      */
+.text-animation-title{display:inline-block;transform-style:preserve-3d;will-change:transform,filter}
+.text-animation-unit{display:inline-block;backface-visibility:hidden;white-space:pre;
+  transform-origin:50% 55%;will-change:opacity}
+@media (prefers-reduced-motion:reduce){
+  .text-animation-title{transform:none!important;filter:none!important}
+  .text-animation-unit{opacity:1!important}
+}
+
 /* ══ Sticky header — hiện khi cuộn qua hero, nền sáng ══ */
 .stickyhd{position:fixed;top:0;left:0;width:1600px;z-index:200;
   background:rgba(251,250,247,.94);backdrop-filter:blur(14px) saturate(1.3);
@@ -607,23 +620,71 @@ html.fluid .mood__img img{position:absolute;left:50%;top:50%;transform:translate
 
 /* ─────────── ≤767px ─────────── */
 @media (max-width:768px){
+  html.fluid body{overflow-x:hidden}
+  html.fluid #stage{overflow:hidden}
+  html.fluid .sec,html.fluid .sec--128{padding:64px var(--pad)}
+  html.fluid .best-sec,html.fluid .band,html.fluid .help{padding:60px var(--pad)}
+  html.fluid .craft__txt{padding:60px var(--pad)}
+  html.fluid .h2,html.fluid .help h2,html.fluid .craft__txt h2{font-size:clamp(32px,9vw,42px);line-height:1.06}
+  html.fluid .hero__h1{font-size:clamp(40px,11vw,52px);line-height:1.04}
+  html.fluid .band h2{font-size:clamp(38px,10vw,48px);line-height:1.04}
+  html.fluid .lede,html.fluid .hero__desc{font-size:15px;line-height:1.5;text-wrap:pretty}
+
   html.fluid .pgrid{grid-template-columns:repeat(2,1fr);gap:12px}
-  html.fluid .cats{grid-template-columns:repeat(2,1fr)}
+  html.fluid .cats{display:flex;gap:10px;overflow-x:auto;overscroll-behavior-inline:contain;
+    scroll-snap-type:x proximity;scrollbar-width:none;padding-bottom:4px}
+  html.fluid .cats::-webkit-scrollbar{display:none}
+  html.fluid .cat,html.fluid .cat:nth-child(2),html.fluid .cat:nth-child(5){
+    flex:0 0 clamp(146px,42vw,180px);min-height:142px;padding:18px 12px;scroll-snap-align:start}
   html.fluid .worlds,html.fluid .posts{grid-template-columns:1fr}
-  html.fluid .world,html.fluid .post{min-height:340px}
-  html.fluid .hero__hd{flex-wrap:wrap;row-gap:12px;gap:14px}
-  html.fluid .hero__nav{order:3;width:100%;margin-left:0;overflow-x:auto;scrollbar-width:none}
-  html.fluid .hero__nav::-webkit-scrollbar{display:none}
+  html.fluid .world{min-height:420px;padding:20px}
+  html.fluid .post{min-height:380px;padding:20px}
+  html.fluid .hero__hd{flex-wrap:nowrap;gap:14px;padding-block:14px}
+  html.fluid .hero__logo{width:100px;height:38px}
+  html.fluid .hero__nav{display:none}
   html.fluid .hero__act{margin-left:auto}
+  html.fluid .hero__media{height:clamp(270px,72vw,340px)}
+  html.fluid .hero__hatbox{width:94vw;height:100%}
+  html.fluid .hero__hatbox img{inset:0;width:100%;height:100%;object-fit:contain}
+  html.fluid .hero__tex{top:0;width:120%;height:100%;object-fit:cover}
+  html.fluid .hero__pill{left:auto;right:var(--pad);transform:none;bottom:10px;padding:9px 13px}
+  html.fluid .hero__pill span{font-size:12px;letter-spacing:1.2px}
+  html.fluid .hero__copy{margin-top:12px}
+  html.fluid .hero__stack{gap:32px}
+  html.fluid .hero__block{gap:20px}
+  html.fluid .hero__dots{padding-top:18px}
+  html.fluid .usp{justify-content:flex-start;flex-wrap:nowrap;overflow-x:auto;overscroll-behavior-inline:contain;
+    scrollbar-width:none;gap:24px;padding-block:16px}
+  html.fluid .usp::-webkit-scrollbar{display:none}
+  html.fluid .usp>div{flex:none}
   html.fluid .filterbar{flex-direction:column;align-items:flex-start;gap:14px}
+  html.fluid .chips{width:100%;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none}
+  html.fluid .chips::-webkit-scrollbar{display:none}
   html.fluid .chip{height:38px;padding:8px 14px;font-size:12px}
+  html.fluid .pmedia__img img{object-fit:contain}
+  html.fluid .pcta{transform:none;opacity:1}
+  html.fluid .pname{font-size:clamp(18px,5.2vw,22px);text-wrap:balance}
+  html.fluid .pcat{overflow-wrap:anywhere}
+  html.fluid .world__imgwrap{top:18px;right:14px;bottom:116px;left:14px}
+  html.fluid .world__imgwrap img{inset:0;width:100%;height:100%;object-fit:contain}
+  html.fluid .w3 .world__imgwrap img{top:0;height:100%}
+  html.fluid .world__txt{gap:8px}
+  html.fluid .post__bg img{inset:0;width:100%;height:100%;object-fit:cover}
   html.fluid .mood__panel{flex-direction:column}
-  html.fluid .mood__img{flex:0 0 190px;width:100%}
-  html.fluid .mood__img img{height:100%;width:auto}
+  html.fluid .mood__list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+  html.fluid .mood__btn{width:100%;height:52px}
+  html.fluid .mood__img{flex:0 0 240px;width:100%}
+  html.fluid .mood__img img{position:static;width:100%;height:100%;object-fit:contain;transform:none;padding:8px 18px 0}
+  html.fluid .mood__txt{padding:24px;min-height:250px}
+  html.fluid .mood__h3{font-size:clamp(32px,8.5vw,40px);text-wrap:balance}
+  html.fluid .mood__btn2{min-height:50px}
   html.fluid .foot__top{grid-template-columns:1fr;gap:28px}
   html.fluid .foot__bot{flex-direction:column;align-items:flex-start;gap:14px}
+  html.fluid .foot__end{width:100%;justify-content:space-between}
+  html.fluid .foot__end span{white-space:normal}
   html.fluid .foot__brand p{width:auto;max-width:none;white-space:normal}
   html.fluid .craft__img{height:240px}
+  html.fluid .craft__img img{inset:0;width:100%;height:100%;object-fit:cover}
   html.fluid .pbody{gap:10px}
   html.fluid .pcat{font-size:11px;letter-spacing:1.4px}
   html.fluid .pcta{height:46px;font-size:12px}
@@ -631,14 +692,31 @@ html.fluid .mood__img img{position:absolute;left:50%;top:50%;transform:translate
 
 /* ─────────── ≤479px ─────────── */
 @media (max-width:480px){
+  html.fluid{--pad:16px}
+  html.fluid .sec,html.fluid .sec--128{padding:56px var(--pad)}
+  html.fluid .best-sec,html.fluid .band,html.fluid .help{padding:52px var(--pad)}
+  html.fluid .craft__txt{padding:52px var(--pad)}
   html.fluid .announce .a-link{display:none}
-  html.fluid .usp>div:nth-child(3){display:none}
+  html.fluid .announce p{line-height:1.45}
+  html.fluid .announce .a-dim{display:none}
+  html.fluid .hero__media{height:280px}
+  html.fluid .hero__pill{bottom:4px}
   html.fluid .hero__cta{flex-direction:column;align-items:stretch;width:100%}
   html.fluid .hero__cta .btn-fill,html.fluid .hero__cta .btn-line{width:100%}
   html.fluid .hero__opt{gap:14px}
-  html.fluid .mood__btn{flex:1 1 100%}
+  html.fluid .world{min-height:390px}
+  html.fluid .mood__list{grid-template-columns:1fr}
+  html.fluid .mood__img{flex-basis:220px}
+  html.fluid .mood__txt{min-height:238px;padding:22px}
+  html.fluid .mood__btn{width:100%}
   html.fluid .help__btns{flex-direction:column;align-items:stretch}
   html.fluid .help__b{justify-content:center}
+}
+
+@media (hover:none){
+  html.fluid .pcard:hover{transform:none}
+  html.fluid .pcard:hover .pmedia__img{transform:none}
+  html.fluid .world:hover{box-shadow:none}
 }
 
 @media (prefers-reduced-motion:reduce){
@@ -1131,7 +1209,7 @@ html.fluid .mood__img img{position:absolute;left:50%;top:50%;transform:translate
       var h = p.getBoundingClientRect().height / z;
       p.style.top = (h > vh ? Math.round(vh - h) : 0) + 'px';
       p.style.zIndex = i + 1;             // nhóm sau luôn nằm trên nhóm trước
-      p.style.minHeight = (i === panels.length - 1) ? Math.ceil(vh) + 'px' : '';
+      p.style.minHeight = '';   // panel cuối không ép cao bằng màn hình, tránh hở dưới footer
     });
   }
 
@@ -1226,6 +1304,111 @@ html.fluid .mood__img img{position:absolute;left:50%;top:50%;transform:translate
       });
     });
   });
+})();
+</script>
+<script>
+/* animate-text · short-slide-right  (pixel-point/animate-text)
+   Số liệu lấy nguyên từ spec, đã nhân runtime.speed_multiplier = 0.72:
+     enter_title        : 520ms  -> 374ms,  x -24px -> 0,  blur 1.2px -> 0
+     enter_word_opacity : 210ms  -> 151ms,  delay_step 92ms -> 66ms
+     easing             : cubic-bezier(0.2, 0.8, 0.2, 1)
+   Trang này cuộn nên dùng enter-on-view (chạy một lần khi tiêu đề lọt
+   khung nhìn) thay vì vòng lặp enter/hold/exit/gap của bản showcase. */
+(function(){
+  var EASE = 'cubic-bezier(0.2, 0.8, 0.2, 1)';
+  var TITLE = { duration: 374, x_from: -24, blur_from: 1.2 };
+  var WORD  = { duration: 151, step: 66, from: 0, to: 1 };
+
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  var titles = [].slice.call(document.querySelectorAll(
+    '.hero__h1, .h2, .band h2, .craft__txt h2, .help h2'));
+  if (!titles.length) return;
+
+  /* Tách theo từ. <br> giữ nguyên để không mất ngắt dòng của thiết kế.
+     Khoảng trắng thành span riêng, giữ layout nhưng không nhận tween. */
+  function split(el){
+    var words = [];
+    [].slice.call(el.childNodes).forEach(function(node){
+      if (node.nodeType === 1) return;                 // <br>, <em>… để nguyên
+      if (node.nodeType !== 3 || !node.nodeValue) return;
+      var frag = document.createDocumentFragment();
+      node.nodeValue.split(/(\s+)/).forEach(function(part){
+        if (!part) return;
+        var sp = document.createElement('span');
+        sp.className = 'text-animation-unit';
+        sp.textContent = part;
+        if (!/^\s+$/.test(part)) words.push(sp);       // chỉ từ mới nhận opacity
+        frag.appendChild(sp);
+      });
+      node.parentNode.replaceChild(frag, node);
+    });
+    return words;
+  }
+
+  function play(el){
+    el.animate(
+      [{ transform: 'translate3d(' + TITLE.x_from + 'px,0,0)', filter: 'blur(' + TITLE.blur_from + 'px)' },
+       { transform: 'translate3d(0,0,0)', filter: 'blur(0px)' }],
+      { duration: TITLE.duration, easing: EASE, fill: 'forwards' });
+
+    el.__words.forEach(function(w, i){
+      w.animate([{ opacity: WORD.from }, { opacity: WORD.to }],
+        { duration: WORD.duration, delay: i * WORD.step, easing: EASE, fill: 'forwards' });
+    });
+  }
+
+  var pending = [];
+  titles.forEach(function(el){
+    el.classList.add('text-animation-title');
+    var words = split(el);
+    if (!words.length) return;
+    el.__words = words;
+    el.style.transform = 'translate3d(' + TITLE.x_from + 'px,0,0)';
+    el.style.filter = 'blur(' + TITLE.blur_from + 'px)';
+    words.forEach(function(w){ w.style.opacity = WORD.from; });
+    pending.push(el);
+  });
+
+  /* Không dùng IntersectionObserver: nó tính hình học theo toạ độ chưa
+     nhân CSS zoom, nên ở chế độ canvas chỉ tiêu đề trong màn đầu mới
+     kích hoạt, phần còn lại kẹt ở trạng thái ẩn. getBoundingClientRect
+     thì đã quy về px màn hình nên chuẩn ở cả hai chế độ. */
+  function check(){
+    for (var i = pending.length - 1; i >= 0; i--){
+      var el = pending[i], r = el.getBoundingClientRect();
+      if (r.top < window.innerHeight * 0.92 && r.bottom > 0){
+        play(el);
+        pending.splice(i, 1);
+      }
+    }
+  }
+
+  /* Ba lớp kích hoạt, vì không lớp nào chắc chắn trong mọi hoàn cảnh:
+       · scroll/resize — phản hồi tức thì khi người dùng cuộn
+       · rAF 3 giây đầu — bắt lúc layout còn đang ổn định (font, zoom)
+       · setInterval    — chốt chặn; vẫn chạy cả khi tab bị ẩn hoặc rAF
+                          bị bóp, nên tiêu đề không bao giờ kẹt ở trạng
+                          thái ẩn. Tự dọn khi mọi tiêu đề đã chạy. */
+  window.addEventListener('scroll', check, { passive: true });
+  window.addEventListener('resize', check);
+  window.addEventListener('load', check);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(check);
+
+  var t0 = performance.now();
+  (function settle(){
+    check();
+    if (pending.length && performance.now() - t0 < 3000) requestAnimationFrame(settle);
+  })();
+
+  var backstop = setInterval(function(){
+    check();
+    if (!pending.length){
+      clearInterval(backstop);
+      window.removeEventListener('scroll', check);
+      window.removeEventListener('resize', check);
+    }
+  }, 200);
 })();
 </script>
 </body>

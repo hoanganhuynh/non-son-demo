@@ -15,6 +15,7 @@ khung gốc 1600px, scale theo bề rộng cửa sổ bằng CSS `zoom`.
 - **Hover** — card có shadow + zoom ảnh + CTA "Thêm vào giỏ"; nút và link đều có trạng thái
 - **Giỏ hàng** — bấm "Thêm vào giỏ" cộng 1 vào badge trên header (mỗi nút một lần)
 - Nút về đầu trang ở footer
+- **Animation tiêu đề** — hiệu ứng `short-slide-right` (spec: [pixel-point/animate-text](https://github.com/pixel-point/animate-text)), chạy bằng Web Animations API, không thêm thư viện
 - **Sticky header** nền sáng khi cuộn qua hero
 - **Responsive** — canvas 1:1 từ 1201px trở lên; từ 1200px xuống layout co giãn thật (mốc 1200 · 1024 · 768 · 480)
 
