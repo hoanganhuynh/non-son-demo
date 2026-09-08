@@ -740,16 +740,16 @@ html.fluid .mood__img img{position:absolute;left:50%;top:50%;transform:translate
   html.fluid .hero__logo{width:100px;height:38px}
   html.fluid .hero__nav{display:none}
   html.fluid .hero__act{margin-left:auto}
-  html.fluid .hero__media{height:clamp(250px,66vw,310px)}
-  html.fluid .hero__hatbox{width:94vw;height:100%}
+  html.fluid .hero__media{height:auto;aspect-ratio:1/1}
+  html.fluid .hero__hatbox{width:94vw;height:94vw;top:50%;transform:translate(-50%,-50%)}
   html.fluid .hero__hatbox img{inset:0;width:100%;height:100%;object-fit:contain}
   /* Frame 3D là 640px trong khung vuông: trên mobile phải dùng cùng box
      contain với ảnh tĩnh, không kế thừa crop/phóng 165% của desktop. */
   html.fluid .hero__v3d{inset:0;width:100%;height:100%}
-  html.fluid .hero__v3d canvas{width:auto;height:125%;aspect-ratio:1/1;margin:-12.5% auto 0}
+  html.fluid .hero__v3d canvas{width:auto;height:90%;aspect-ratio:1/1;margin:5% auto 0}
   html.fluid .hero__3dhint{left:50%;top:32px}
   html.fluid .hero__tex{top:0;width:120%;height:100%;object-fit:cover}
-  html.fluid .hero__pill{left:50%;right:auto;transform:translateX(-50%);bottom:24px;padding:9px 13px}
+  html.fluid .hero__pill{left:50%;right:auto;transform:translateX(-50%);bottom:36px;padding:9px 13px}
   html.fluid .hero__pill span{font-size:12px;letter-spacing:1.2px}
   html.fluid .hero__copy{margin-top:8px;padding-top:16px}
   html.fluid .hero__stack{gap:24px}
@@ -845,8 +845,7 @@ html.fluid .mood__img img{position:absolute;left:50%;top:50%;transform:translate
   html.fluid .sec,html.fluid .sec--128{padding:44px var(--pad)}
   html.fluid .best-sec,html.fluid .band,html.fluid .help{padding:42px var(--pad)}
   html.fluid .craft__txt{padding:42px var(--pad)}
-  html.fluid .hero__media{height:250px}
-  html.fluid .hero__pill{bottom:4px}
+  html.fluid .hero__pill{bottom:36px}
   html.fluid .hero__opt{gap:14px}
   html.fluid .mood__txt{min-height:184px;padding:18px}
 }
