@@ -59,6 +59,8 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
 .announce .a-link{display:flex;align-items:center;height:12px;font-size:9.6px;letter-spacing:1.44px;
   text-transform:uppercase;color:rgba(244,241,234,.72);line-height:14.4px}
 .announce .a-link img{width:11.05px;height:9.5px;transform:scaleY(-1)}
+.announce__marquee{display:contents}
+.announce__copy[aria-hidden="true"]{display:none}
 
 /* ───────── 02 · Hero (199:7091) ───────── */
 .hero{position:relative;height:900px;background:#121212;overflow:hidden}
@@ -563,8 +565,8 @@ html.menu-open{overflow:hidden}
    ≥1200px : giữ canvas 1600px, scale bằng zoom (đúng tỉ lệ Figma)
    <1200px : html.fluid — bỏ zoom, layout co giãn thật theo breakpoint
              1200 · 1024 · 768 · 480
-   Stacking scroll tắt dưới 768px (panel cao hơn màn hình nhiều lần,
-   ghim lại không còn ý nghĩa mà chỉ tốn GPU).
+   Stacking scroll dùng chung desktop/mobile; JS tự canh top âm cho
+   panel cao hơn viewport để vẫn cuộn hết nội dung trước khi ghim.
    ══════════════════════════════════════════════════════════════════ */
 html.fluid{--pad:48px}
 @media (max-width:1024px){html.fluid{--pad:32px}}
@@ -675,10 +677,14 @@ html.fluid .mood__img img{position:absolute;left:50%;top:50%;transform:translate
   html.fluid .mood__h3{font-size:clamp(28px,7.4vw,32px)}
   html.fluid .world__txt h3,html.fluid .post h3{font-size:clamp(26px,7vw,32px)}
   html.fluid .lede,html.fluid .hero__desc{font-size:14px;line-height:1.48;text-wrap:pretty}
-  html.fluid .hero__eyebrow,html.fluid .eyebrow,html.fluid .craft__txt .kick{font-size:12px;letter-spacing:1.65px}
-  html.fluid .announce p,html.fluid .announce .a-link{font-size:12px}
-  html.fluid .iconbtn .cnt{width:22px;height:22px;font-size:12px;line-height:1}
-  html.fluid .mobile-menu__nav small,html.fluid .mobile-menu__foot{font-size:12px}
+  html.fluid .hero__eyebrow,html.fluid .eyebrow,html.fluid .craft__txt .kick{font-size:10px;letter-spacing:1.65px}
+  html.fluid .announce{overflow:hidden;padding-inline:0;justify-content:flex-start}
+  html.fluid .announce .a-link{display:none}
+  html.fluid .announce__marquee{display:flex;width:max-content;animation:announce-scroll 20s linear infinite}
+  html.fluid .announce__copy,html.fluid .announce__copy[aria-hidden="true"]{display:flex;flex:none;white-space:nowrap;
+    padding-right:40px;font-size:12px;line-height:1.45}
+  html.fluid .iconbtn .cnt{width:22px;height:22px;font-size:10px;line-height:1}
+  html.fluid .mobile-menu__nav small,html.fluid .mobile-menu__foot{font-size:10px}
   html.fluid .cats-sec{gap:28px}
   html.fluid .new-sec,html.fluid .best-sec,html.fluid .mood-sec{gap:20px}
   html.fluid .worlds-sec,html.fluid .post-sec{gap:36px}
@@ -688,12 +694,12 @@ html.fluid .mood__img img{position:absolute;left:50%;top:50%;transform:translate
   html.fluid .cat,html.fluid .cat:nth-child(2),html.fluid .cat:nth-child(5){
     width:auto;min-width:0;min-height:112px;padding:14px 8px}
   html.fluid .cat b{font-size:14px;line-height:1.25}
-  html.fluid .cat small{font-size:12px;line-height:1.3}
+  html.fluid .cat small{font-size:10px;line-height:1.3}
   html.fluid .worlds{display:flex;gap:12px;overflow-x:auto;overscroll-behavior-inline:contain;
     scroll-snap-type:x mandatory;scroll-padding-inline:0;scrollbar-width:none}
   html.fluid .worlds::-webkit-scrollbar{display:none}
   html.fluid .posts{grid-template-columns:1fr}
-  html.fluid .world{flex:0 0 82%;min-height:0;padding:18px;gap:12px;scroll-snap-align:start}
+  html.fluid .world{flex:0 0 82%;min-height:0;padding:18px;gap:8px;scroll-snap-align:start}
   html.fluid .posts{display:flex;gap:12px;overflow-x:auto;overscroll-behavior-inline:contain;
     scroll-snap-type:x mandatory;scrollbar-width:none}
   html.fluid .posts::-webkit-scrollbar{display:none}
@@ -714,7 +720,7 @@ html.fluid .mood__img img{position:absolute;left:50%;top:50%;transform:translate
   html.fluid .hero__opt{padding-top:14px}
   html.fluid .hero__optlbl,html.fluid .hero__optval{font-size:12px}
   html.fluid .hero__cta{flex-direction:column;align-items:stretch;width:100%}
-  html.fluid .hero__cta .btn-fill,html.fluid .hero__cta .btn-line{width:100%;min-height:48px;padding:13px 16px;font-size:15px;letter-spacing:1px}
+  html.fluid .hero__cta .btn-fill,html.fluid .hero__cta .btn-line{width:100%;min-height:48px;padding:13px 16px;font-size:14px;letter-spacing:1px}
   html.fluid .hero__dots{padding-top:14px}
   html.fluid .usp{justify-content:flex-start;flex-wrap:nowrap;overflow-x:auto;overscroll-behavior-inline:contain;
     scrollbar-width:none;gap:24px;padding-block:16px}
@@ -727,12 +733,19 @@ html.fluid .mood__img img{position:absolute;left:50%;top:50%;transform:translate
   html.fluid .sortbox{height:38px;padding:6px 0}
   html.fluid .sortbox span{font-size:12px}
   html.fluid .viewall{height:38px;gap:10px}
-  html.fluid .viewall span{font-size:15px;letter-spacing:1.1px}
+  html.fluid .viewall span{font-size:12px;letter-spacing:1.1px}
   html.fluid .viewall img{width:15px;height:14px}
+  html.fluid .best-sec .filterbar,html.fluid .best-sec .filterbar .end{display:contents}
+  html.fluid .best-sec>.h2{order:0}
+  html.fluid .best-sec .chips{order:1}
+  html.fluid .best-sec .sortbox{order:2;align-self:flex-start}
+  html.fluid .best-sec .pgrid{order:3}
+  html.fluid .best-sec .bdots{order:4}
+  html.fluid .best-sec .viewall{order:5;align-self:center}
   html.fluid .pmedia__img img{inset:6% 0;width:100%;height:88%;object-fit:contain}
   html.fluid .pmedia__img--fit img.sq82,html.fluid .pmedia__img--fit img.sq96,html.fluid .pmedia__img--fit img.sq97{
     inset:2%;width:96%;height:96%;aspect-ratio:auto;transform:none;object-fit:contain}
-  html.fluid .ptag{font-size:12px;line-height:1.25}
+  html.fluid .ptag{font-size:10px;line-height:1.25}
   html.fluid .pcta{display:none}
   html.fluid .pbody{padding-top:14px;gap:8px}
   html.fluid .pname{font-size:18px;line-height:1.22;text-wrap:balance}
@@ -740,14 +753,15 @@ html.fluid .mood__img img{position:absolute;left:50%;top:50%;transform:translate
   html.fluid .pmeta{font-size:14px;line-height:1.4}
   html.fluid .pprice{font-size:14px}
   html.fluid .world{justify-content:flex-start}
-  html.fluid .world__imgwrap{position:relative;inset:auto;width:100%;height:210px;margin:4px 0 10px}
-  html.fluid .world__imgwrap img{inset:0;width:100%;height:100%;object-fit:contain}
-  html.fluid .w3 .world__imgwrap img{top:0;height:100%}
-  html.fluid .world__no{font-size:12px}
+  html.fluid .world__imgwrap{position:relative;inset:auto;width:100%;height:185px;margin:0}
+  html.fluid .world__imgwrap>div{overflow:visible}
+  html.fluid .world__imgwrap img{left:0;top:0;width:100%;height:auto;aspect-ratio:1;object-fit:contain}
+  html.fluid .w3 .world__imgwrap img{top:0;height:auto}
+  html.fluid .world__no{font-size:10px}
   html.fluid .world__txt{gap:6px;margin-top:0}
   html.fluid .world__txt p,html.fluid .post p{font-size:14px;line-height:1.4}
   html.fluid .world__link{height:44px;margin-top:6px}
-  html.fluid .world__link span{font-size:15px}
+  html.fluid .world__link span{font-size:14px}
   html.fluid .post__bg img{inset:0;width:100%;height:100%;object-fit:cover}
   html.fluid .mood__panel{flex-direction:column}
   html.fluid .mood__list{display:flex;flex-wrap:nowrap;overflow-x:auto;overscroll-behavior-inline:contain;scrollbar-width:none;gap:8px}
@@ -758,11 +772,11 @@ html.fluid .mood__img img{position:absolute;left:50%;top:50%;transform:translate
   html.fluid .mood__img{flex:0 0 220px;width:100%}
   html.fluid .mood__img img{position:static;width:100%;height:100%;object-fit:contain;transform:none;padding:8px 18px 0}
   html.fluid .mood__txt{padding:20px;min-height:190px}
-  html.fluid .mood__kicker{font-size:12px;letter-spacing:1.65px}
+  html.fluid .mood__kicker{font-size:10px;letter-spacing:1.65px}
   html.fluid .mood__h3{text-wrap:balance;margin-top:14px}
   html.fluid .mood__p{font-size:14px;margin-top:8px}
   html.fluid .band__btn,html.fluid .mood__btn2{width:100%}
-  html.fluid .mood__btn2{min-height:48px;padding:13px 16px}
+  html.fluid .mood__btn2{min-height:48px;padding:13px 16px;margin-top:16px}
   html.fluid .foot__top{grid-template-columns:1fr;gap:28px}
   html.fluid .foot__bot{flex-direction:column;align-items:flex-start;gap:14px}
   html.fluid .foot__end{width:100%;justify-content:space-between}
@@ -770,7 +784,7 @@ html.fluid .mood__img img{position:absolute;left:50%;top:50%;transform:translate
   html.fluid .foot__brand p{width:auto;max-width:none;white-space:normal}
   html.fluid .craft__img{height:240px}
   html.fluid .craft__img img{inset:0;width:100%;height:100%;object-fit:cover}
-  html.fluid .pcat{font-size:12px;letter-spacing:1.15px;line-height:1.35}
+  html.fluid .pcat{font-size:10px;letter-spacing:1.15px;line-height:1.35}
   html.fluid .help__break{display:none}
   html.fluid .help h2{width:100%;max-width:18ch;text-wrap:balance}
   html.fluid .help__r{gap:18px}
@@ -780,9 +794,9 @@ html.fluid .mood__img img{position:absolute;left:50%;top:50%;transform:translate
   html.fluid .band__r p{font-size:14px;line-height:1.45}
   html.fluid .band__btn{min-height:48px;padding:13px 16px;gap:8px}
   html.fluid .band__btn img{width:20px;height:18px}
-  html.fluid .band__btn span,html.fluid .mood__btn2,html.fluid .help__b span{font-size:15px;letter-spacing:1px}
-  html.fluid .post-hd__r span,html.fluid .craft__link span{font-size:15px}
-  html.fluid .foot__col h4,html.fluid .foot__bot span{font-size:12px}
+  html.fluid .band__btn span,html.fluid .mood__btn2,html.fluid .help__b span{font-size:14px;letter-spacing:1px}
+  html.fluid .post-hd__r span,html.fluid .craft__link span{font-size:14px}
+  html.fluid .foot__col h4,html.fluid .foot__bot span{font-size:10px}
   html.fluid .foot__col a,html.fluid .foot__brand p{font-size:14px}
   html.fluid .menubtn{display:flex}
 }
@@ -793,9 +807,6 @@ html.fluid .mood__img img{position:absolute;left:50%;top:50%;transform:translate
   html.fluid .sec,html.fluid .sec--128{padding:44px var(--pad)}
   html.fluid .best-sec,html.fluid .band,html.fluid .help{padding:42px var(--pad)}
   html.fluid .craft__txt{padding:42px var(--pad)}
-  html.fluid .announce .a-link{display:none}
-  html.fluid .announce p{line-height:1.45}
-  html.fluid .announce .a-dim{display:none}
   html.fluid .hero__media{height:250px}
   html.fluid .hero__pill{bottom:4px}
   html.fluid .hero__opt{gap:14px}
@@ -810,7 +821,11 @@ html.fluid .mood__img img{position:absolute;left:50%;top:50%;transform:translate
 
 @media (prefers-reduced-motion:reduce){
   *{transition-duration:.01ms!important}
+  .announce__marquee{animation:none!important;transform:none!important}
+  .announce__copy[aria-hidden="true"]{display:none!important}
 }
+
+@keyframes announce-scroll{to{transform:translateX(-50%)}}
 </style>
 </head>
 <body>
@@ -848,7 +863,10 @@ html.fluid .mood__img img{position:absolute;left:50%;top:50%;transform:translate
 <div class="panel" data-panel="1" aria-label="Hero">
 <!-- ══ 01 · Announce bar · 18:10543 ══ -->
 <div class="announce">
-  <div><p><span class="a-strong">Đặc quyền hội viên</span><span class="a-dim"> · Đổi size miễn phí trong 10 ngày</span></p></div>
+  <div class="announce__marquee">
+    <p class="announce__copy"><span class="a-strong">Đặc quyền hội viên</span><span class="a-dim"> · Đổi size miễn phí trong 10 ngày</span></p>
+    <p class="announce__copy" aria-hidden="true"><span class="a-strong">Đặc quyền hội viên</span><span class="a-dim"> · Đổi size miễn phí trong 10 ngày</span></p>
+  </div>
   <a class="a-link" href="#">Tư vấn riêng qua Zalo&nbsp;<img src="img-v4/ic-arrow-tiny.svg" alt=""></a>
 </div>
 
@@ -1289,15 +1307,13 @@ html.fluid .mood__img img{position:absolute;left:50%;top:50%;transform:translate
   var canZoom = window.CSS && CSS.supports && CSS.supports('zoom', '0.5');
 
   var FLUID_BELOW = 1201;   // từ 1200px trở xuống: layout co giãn thật, không scale nữa
-  var STACK_ABOVE  = 768;   // dưới mức này tắt stacking, cuộn thường
-
   function layout(){
     var w = window.innerWidth;
     var fluid = w < FLUID_BELOW;
     var root  = document.documentElement;
 
     root.classList.toggle('fluid', fluid);
-    root.classList.toggle('no-stack', w < STACK_ABOVE || !canZoom);
+    root.classList.toggle('no-stack', !canZoom);
 
     if (!canZoom){                       // dự phòng: scale, không stacking
       stage.style.transform = 'scale(' + (w / 1600) + ')';
