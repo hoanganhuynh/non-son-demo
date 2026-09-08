@@ -11,7 +11,9 @@ test('mobile product artwork preserves its intrinsic ratio', () => {
 
 test('mobile 3D hero preserves the square source frame instead of stretching it', () => {
   assert.match(html, /@media \(max-width:768px\)[\s\S]*?html\.fluid \.hero__v3d\{inset:0;width:100%;height:100%\}/);
-  assert.match(html, /@media \(max-width:768px\)[\s\S]*?html\.fluid \.hero__v3d canvas\{width:auto;height:100%;aspect-ratio:1\/1;margin:0 auto\}/);
+  assert.match(html, /@media \(max-width:768px\)[\s\S]*?html\.fluid \.hero__v3d canvas\{width:auto;height:116%;aspect-ratio:1\/1;margin:-8% auto 0\}/);
+  assert.match(html, /@media \(max-width:768px\)[\s\S]*?html\.fluid \.hero__3dhint\{left:50%;top:32px\}/);
+  assert.match(html, /@media \(max-width:768px\)[\s\S]*?html\.fluid \.hero__pill\{left:50%;right:auto;transform:translateX\(-50%\);bottom:10px/);
 });
 
 test('mobile media and editorial images use stable crops', () => {
