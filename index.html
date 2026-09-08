@@ -430,10 +430,10 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
 /* ══ Card sản phẩm hiện ra lần lượt khi cuộn ══
    Card nào lọt vào khung nhìn trong cùng một nhịp kiểm tra thì xếp hàng
    và hiện so le 90ms một cái, thay vì bật ra cùng lúc.                */
-.pcard.rv-pre{opacity:0;transform:translateY(30px)}
+.pcard.rv-pre,.world.rv-pre,.post.rv-pre{opacity:0;transform:translateY(30px)}
 .pcard{transition:transform .62s cubic-bezier(.16,1,.3,1),opacity .62s cubic-bezier(.16,1,.3,1),
   box-shadow .5s var(--e,cubic-bezier(.22,.9,.24,1)),border-color .5s}
-@media (prefers-reduced-motion:reduce){.pcard.rv-pre{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.pcard.rv-pre,.world.rv-pre,.post.rv-pre{opacity:1;transform:none}}
 .pcard{cursor:pointer}
 .pcard:hover{transform:translateY(-4px)}
 /* zoom trên wrapper, không phải trên <img>: mấy card bán chạy đã dùng
@@ -450,7 +450,9 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
 .band__btn:active{box-shadow:0 6px 16px -10px rgba(18,18,18,.5)}
 
 /* ── Bốn thế giới ── */
-.world{box-shadow:0 0 0 rgba(18,18,18,0);transition:box-shadow .3s ease}
+.world{box-shadow:0 0 0 rgba(18,18,18,0);
+  transition:box-shadow .3s ease,opacity .62s cubic-bezier(.16,1,.3,1),transform .62s cubic-bezier(.16,1,.3,1)}
+.post{transition:border-color .22s ease,opacity .62s cubic-bezier(.16,1,.3,1),transform .62s cubic-bezier(.16,1,.3,1)}
 .world:hover{box-shadow:0 20px 46px -22px rgba(18,18,18,.45)}
 .world:hover .world__imgwrap{transform:scale(1.03)}
 .w1:hover .world__imgwrap{transform:rotate(-6deg) scale(1.03)}
@@ -547,25 +549,48 @@ html.has-cursor,html.has-cursor *{cursor:none!important}
 html.fluid .stickyhd{width:100%;padding:11px var(--pad)}
 @media (max-width:900px){.stickyhd__nav{display:none}}
 
+/* ══ Xem 3D ở hero ══
+   Dùng chung chuỗi frame với trang PDP (3d-sequence-prod/, 97 ảnh WebP đã
+   tách nền). Canvas đặt đúng khung của ảnh tĩnh nên bật/tắt không nhảy cỡ. */
+.hero__v3d{position:absolute;height:165.15%;left:-11.15%;top:-32.73%;width:116.37%;
+  display:none;touch-action:pan-y}
+.hero__v3d.on{display:block}
+.hero__v3d canvas{width:100%;height:100%;display:block}
+.hero__pill{z-index:4}
+.hero__pill.on{background:#ffe4f1}
+.hero__pill.on span{color:#d11f70}
+.hero__pill.on:hover{background:#fbd3e7}
+.hero__3dhint{position:absolute;left:calc(50% + 14px);transform:translateX(-50%);top:88px;z-index:4;
+  font-size:12px;letter-spacing:1.6px;text-transform:uppercase;color:rgba(244,241,234,.62);
+  white-space:nowrap;pointer-events:none;opacity:0;transition:opacity .35s ease}
+.hero__media.is3d .hero__3dhint{opacity:1}
+.hero__3dload{position:absolute;left:0;right:0;top:52%;z-index:4;display:flex;flex-direction:column;
+  align-items:center;gap:12px;font-size:12px;letter-spacing:1.4px;text-transform:uppercase;
+  color:rgba(244,241,234,.7);pointer-events:none}
+.hero__3dload[hidden]{display:none}   /* display:flex ở trên đè mất [hidden] */
+.hero__3dbar{width:132px;height:2px;background:rgba(244,241,234,.2);overflow:hidden}
+.hero__3dbar i{display:block;height:100%;width:0;background:#ff3390;transition:width .18s linear}
+
 /* ══ Mobile navigation ══ */
 .mobile-menu{border:0;margin:0;width:100%;max-width:none;height:100dvh;max-height:none;padding:0;
-  color:#f4f1ea;background:#121212;overflow:auto}
+  color:#121212;background:#fbfaf7;overflow:auto}
 .mobile-menu[open]{display:flex;flex-direction:column}
-.mobile-menu::backdrop{background:rgba(18,18,18,.72);backdrop-filter:blur(4px)}
-.mobile-menu__head{min-height:72px;padding:14px 20px;display:flex;align-items:center;justify-content:space-between;
-  border-bottom:1px solid rgba(244,241,234,.14)}
-.mobile-menu__logo{width:100px;height:auto}
-.mobile-menu__close{width:44px;height:44px;border:1px solid rgba(244,241,234,.32);border-radius:999px;
-  display:flex;align-items:center;justify-content:center;color:#f4f1ea}
-.mobile-menu__close svg{width:18px;height:18px;stroke:currentColor;stroke-width:1.8;fill:none}
+.mobile-menu::backdrop{background:rgba(18,18,18,.6);backdrop-filter:blur(4px)}
+.mobile-menu__head{min-height:72px;padding:18px 24px;display:flex;align-items:center;justify-content:space-between}
+.mobile-menu__logo{width:96px;height:auto}
+.mobile-menu__close{width:40px;height:40px;border:0;border-radius:999px;display:flex;align-items:center;
+  justify-content:center;color:#766f67;transition:background-color .22s ease,color .22s ease}
+.mobile-menu__close:hover{background:rgba(18,18,18,.06);color:#121212}
+.mobile-menu__close svg{width:17px;height:17px;stroke:currentColor;stroke-width:1.6;fill:none}
 .mobile-menu__title{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
-.mobile-menu__nav{padding:28px 20px 40px;display:flex;flex-direction:column}
-.mobile-menu__nav a{min-height:68px;border-top:1px solid rgba(244,241,234,.14);display:flex;align-items:center;
-  justify-content:space-between;font-family:Newsreader,Georgia,serif;font-size:26px;line-height:1;color:#f4f1ea}
-.mobile-menu__nav a:last-child{border-bottom:1px solid rgba(244,241,234,.14)}
-.mobile-menu__nav small{font-family:Archivo,Arial,sans-serif;font-size:10px;letter-spacing:1.5px;color:#ff3390}
-.mobile-menu__foot{margin-top:auto;padding:0 20px 32px;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:#ff3390}
-.menubtn:focus-visible,.mobile-menu :focus-visible{outline:2px solid #ff3390;outline-offset:3px}
+.mobile-menu__nav{padding:14px 24px 40px;display:flex;flex-direction:column}
+.mobile-menu__nav a{padding:17px 0;font-family:Newsreader,Georgia,serif;font-size:30px;line-height:1.15;
+  color:#121212;border-bottom:1px solid rgba(18,18,18,.08);transition:color .22s ease}
+.mobile-menu__nav a:last-of-type{border-bottom:0}
+.mobile-menu__nav a:hover{color:#d11f70}
+.mobile-menu__foot{margin-top:auto;padding:0 24px 34px;font-size:10px;letter-spacing:1.6px;
+  text-transform:uppercase;color:#766f67}
+.menubtn:focus-visible,.mobile-menu :focus-visible{outline:2px solid #d11f70;outline-offset:3px}
 html.menu-open{overflow:hidden}
 
 /* ══════════════════════════════════════════════════════════════════
@@ -692,7 +717,6 @@ html.fluid .mood__img img{position:absolute;left:50%;top:50%;transform:translate
   html.fluid .announce__copy,html.fluid .announce__copy[aria-hidden="true"]{display:flex;flex:none;white-space:nowrap;
     padding-right:40px;font-size:12px;line-height:1.45}
   html.fluid .iconbtn .cnt{width:22px;height:22px;font-size:10px;line-height:1}
-  html.fluid .mobile-menu__nav small,html.fluid .mobile-menu__foot{font-size:10px}
   html.fluid .cats-sec{gap:28px}
   html.fluid .new-sec,html.fluid .best-sec,html.fluid .mood-sec{gap:20px}
   html.fluid .worlds-sec,html.fluid .post-sec{gap:36px}
@@ -719,6 +743,9 @@ html.fluid .mood__img img{position:absolute;left:50%;top:50%;transform:translate
   html.fluid .hero__media{height:clamp(250px,66vw,310px)}
   html.fluid .hero__hatbox{width:94vw;height:100%}
   html.fluid .hero__hatbox img{inset:0;width:100%;height:100%;object-fit:contain}
+  /* Frame 3D là 640px trong khung vuông: trên mobile phải dùng cùng box
+     contain với ảnh tĩnh, không kế thừa crop/phóng 165% của desktop. */
+  html.fluid .hero__v3d{inset:0;width:100%;height:100%}
   html.fluid .hero__tex{top:0;width:120%;height:100%;object-fit:cover}
   html.fluid .hero__pill{left:auto;right:var(--pad);transform:none;bottom:10px;padding:9px 13px}
   html.fluid .hero__pill span{font-size:12px;letter-spacing:1.2px}
@@ -846,12 +873,12 @@ html.fluid .mood__img img{position:absolute;left:50%;top:50%;transform:translate
     </button>
   </div>
   <nav class="mobile-menu__nav" aria-label="Điều hướng mobile">
-    <a href="#"><small>01</small><span>Bộ sưu tập</span></a>
-    <a href="#"><small>02</small><span>Di sản</span></a>
-    <a href="#"><small>03</small><span>Tạp chí</span></a>
-    <a href="#"><small>04</small><span>Đặc quyền</span></a>
+    <a href="#">Bộ sưu tập</a>
+    <a href="#">Di sản</a>
+    <a href="#">Tạp chí</a>
+    <a href="#">Đặc quyền</a>
   </nav>
-  <p class="mobile-menu__foot">Nón Sơn · Made in Vietnam</p>
+  <p class="mobile-menu__foot">Nón Sơn · Proudly Made in Vietnam</p>
 </dialog>
 <div id="stage">
 
@@ -885,8 +912,13 @@ html.fluid .mood__img img{position:absolute;left:50%;top:50%;transform:translate
 
   <div class="hero__media">
     <img class="hero__tex" src="img-v4/hero-texture.png" alt="">
-    <div class="hero__hatbox"><img src="img-v4/hero-hat.png" alt="Nón Phớt Da Cừu Heritage"></div>
-    <button class="hero__pill"><img src="img-v4/ic-3d.svg" alt=""><span>3D view</span></button>
+    <div class="hero__hatbox">
+      <img src="img-v4/hero-hat.png" alt="Nón Phớt Da Cừu Heritage">
+      <div class="hero__v3d" id="heroV3d"><canvas id="heroV3dCanvas" width="640" height="640"></canvas></div>
+    </div>
+    <div class="hero__3dhint" id="hero3dHint">Kéo trái/phải để xem</div>
+    <div class="hero__3dload" id="hero3dLoad" hidden>Đang tải bản 3D<div class="hero__3dbar"><i id="hero3dBar"></i></div></div>
+    <button class="hero__pill" id="hero3dBtn"><img src="img-v4/ic-3d.svg" alt=""><span>3D view</span></button>
   </div>
 
   <div class="hero__copy">
@@ -951,7 +983,7 @@ html.fluid .mood__img img{position:absolute;left:50%;top:50%;transform:translate
       <div class="eyebrow">Chọn nhanh</div>
       <h2 class="ns h2">Bạn đang tìm gì?</h2>
     </div>
-    <p class="lede">Đi thẳng đến nhóm sản phẩm phù hợp với dịp sử dụng, phong<br>cách và nhu cầu của bạn.</p>
+    <p class="lede">Đi thẳng đến nhóm sản phẩm phù hợp với dịp sử dụng, phong <br>cách và nhu cầu của bạn.</p>
   </div>
   <div class="cats">
     <button class="cat cat--on"><img src="img-v4/cat-all.svg" alt=""><b>Tất cả tuyển chọn</b><small>24 sản phẩm</small></button>
@@ -1153,7 +1185,7 @@ html.fluid .mood__img img{position:absolute;left:50%;top:50%;transform:translate
       <div class="eyebrow">Tuyển chọn</div>
       <h2 class="ns h2">Bốn thế giới,<br>một tinh thần.</h2>
     </div>
-    <p class="lede">Mỗi bộ sưu tập mở ra một cách bước vào thế giới Nón<br>Sơn — từ di sản thủ công đến nhịp sống thành thị.</p>
+    <p class="lede">Mỗi bộ sưu tập mở ra một cách bước vào thế giới Nón <br>Sơn — từ di sản thủ công đến nhịp sống thành thị.</p>
   </div>
   <div class="worlds">
     <button class="world world--pink w1">
@@ -1256,8 +1288,8 @@ html.fluid .mood__img img{position:absolute;left:50%;top:50%;transform:translate
   </div>
   <div class="craft__txt">
     <div class="kick">Câu chuyện chế tác</div>
-    <h2 class="ns">Một sản phẩm<br>tốt cần thời gian.</h2>
-    <p>Trong 72 giờ, một mặt sơn mài đi qua nhiều lớp nền, nhiều lần<br>hong khô và một đôi tay đủ kiên nhẫn để biết khi nào nên dừng lại.</p>
+    <h2 class="ns">Một sản phẩm <br>tốt cần thời gian.</h2>
+    <p>Trong 72 giờ, một mặt sơn mài đi qua nhiều lớp nền, nhiều lần <br>hong khô và một đôi tay đủ kiên nhẫn để biết khi nào nên dừng lại.</p>
     <a class="craft__link" href="#"><span>Xem hành trình chế tác&nbsp;</span><img src="img-v4/ic-arrow-pink2.svg" alt=""></a>
   </div>
 </section>
@@ -1282,7 +1314,7 @@ html.fluid .mood__img img{position:absolute;left:50%;top:50%;transform:translate
   <div class="foot__top">
     <div class="foot__brand">
       <div class="logo"><img src="img-v4/logo-footer.png" alt="Nón Sơn"></div>
-      <p>Mũ bảo hiểm thời trang và nón thủ công Việt Nam cho<br>nhịp sống hiện đại.</p>
+      <p>Mũ bảo hiểm thời trang và nón thủ công Việt Nam cho <br>nhịp sống hiện đại.</p>
     </div>
     <div class="foot__col">
       <h4>Mua sắm</h4>
@@ -1300,7 +1332,7 @@ html.fluid .mood__img img{position:absolute;left:50%;top:50%;transform:translate
   <div class="foot__bot">
     <span>© 2026 Nón Sơn</span>
     <div class="foot__end">
-      <span>Chính hãng · Được chăm sóc · Made in Vietnam</span>
+      <span>Chính hãng · Được chăm sóc · Proudly Made in Vietnam</span>
       <button class="totop" id="toTop" aria-label="Về đầu trang" title="Về đầu trang">
         <svg viewBox="0 0 24 24"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
       </button>
@@ -1523,10 +1555,14 @@ html.fluid .mood__img img{position:absolute;left:50%;top:50%;transform:translate
       var frag = document.createDocumentFragment();
       node.nodeValue.split(/(\s+)/).forEach(function(part){
         if (!part) return;
+        /* Khoảng trắng để nguyên dạng text node, KHÔNG bọc span: span có
+           white-space:pre (spec yêu cầu) sẽ giữ lại cả khoảng trắng mà HTML
+           vốn thu gọn — ví dụ dấu cách ngay sau <br> sẽ thành thụt đầu dòng. */
+        if (/^\s+$/.test(part)){ frag.appendChild(document.createTextNode(part)); return; }
         var sp = document.createElement('span');
         sp.className = 'text-animation-unit';
         sp.textContent = part;
-        if (!/^\s+$/.test(part)) words.push(sp);       // chỉ từ mới nhận opacity
+        words.push(sp);       // chỉ từ mới nhận opacity
         frag.appendChild(sp);
       });
       node.parentNode.replaceChild(frag, node);
@@ -1565,7 +1601,9 @@ html.fluid .mood__img img{position:absolute;left:50%;top:50%;transform:translate
   function check(){
     for (var i = pending.length - 1; i >= 0; i--){
       var el = pending[i], r = el.getBoundingClientRect();
-      if (r.top < window.innerHeight * 0.92 && r.bottom > 0){
+      /* không kiểm tra r.bottom > 0: phần tử đã cuộn qua khỏi khung nhìn
+         (nhảy anchor, phím End, vuốt mạnh) vẫn phải được hiện, không thì kẹt ẩn */
+      if (r.top < window.innerHeight * 0.92){
         play(el);
         pending.splice(i, 1);
       }
@@ -1661,7 +1699,7 @@ html.fluid .mood__img img{position:absolute;left:50%;top:50%;transform:translate
    nhân CSS zoom — cùng lý do đã gặp ở phần animate-text. */
 (function(){
   if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  var pending = [].slice.call(document.querySelectorAll('.pcard'));
+  var pending = [].slice.call(document.querySelectorAll('.pcard, .world, .post'));
   if (!pending.length) return;
   pending.forEach(function(c){ c.classList.add('rv-pre'); });
 
@@ -1669,7 +1707,8 @@ html.fluid .mood__img img{position:absolute;left:50%;top:50%;transform:translate
     var batch = [];
     for (var i = pending.length - 1; i >= 0; i--){
       var c = pending[i], r = c.getBoundingClientRect();
-      if (r.top < window.innerHeight * 0.9 && r.bottom > 0){
+      /* bỏ điều kiện r.bottom > 0 vì lý do như trên */
+      if (r.top < window.innerHeight * 0.9){
         batch.unshift(c);            // giữ đúng thứ tự trái → phải
         pending.splice(i, 1);
       }
@@ -1689,6 +1728,94 @@ html.fluid .mood__img img{position:absolute;left:50%;top:50%;transform:translate
     check();
     if (!pending.length){ clearInterval(backstop); removeEventListener('scroll', check); removeEventListener('resize', check); }
   }, 200);
+})();
+</script>
+<script>
+/* Xem 3D ở hero — cùng cơ chế với trang PDP: 97 frame WebP đã tách nền,
+   vẽ lên canvas, kéo hết bề ngang ảnh = trọn một vòng 360°. */
+(function(){
+  var DIR = '3d-sequence-prod/', COUNT = 97;
+  var btn = document.getElementById('hero3dBtn');
+  var layer = document.getElementById('heroV3d');
+  var canvas = document.getElementById('heroV3dCanvas');
+  var still = document.querySelector('.hero__hatbox > img');
+  var media = document.querySelector('.hero__media');
+  var hint = document.getElementById('hero3dHint');
+  var load = document.getElementById('hero3dLoad');
+  var bar  = document.getElementById('hero3dBar');
+  var ico  = btn ? btn.querySelector('img') : null;
+  if (!btn || !canvas) return;
+
+  var ctx = canvas.getContext('2d');
+  var imgs = [], ready = false, loading = false, on = false;
+  var idx = 0, dragging = false, lastX = 0, vel = 0, raf = 0;
+
+  function draw(){
+    var im = imgs[Math.round(idx) % COUNT];
+    if (!im || !im.complete) return;
+    ctx.clearRect(0, 0, 640, 640);
+    ctx.drawImage(im, 0, 0, 640, 640);
+  }
+  function mod(n, m){ return ((n % m) + m) % m; }
+
+  function preload(done){
+    if (loading) return; loading = true;
+    load.hidden = false;
+    var got = 0;
+    for (var i = 0; i < COUNT; i++){
+      (function(i){
+        var im = new Image();
+        im.onload = im.onerror = function(){
+          got++;
+          bar.style.width = Math.round(got / COUNT * 100) + '%';
+          if (got === COUNT){ ready = true; load.hidden = true; done(); }
+        };
+        im.src = DIR + 'frame_' + String(i + 1).padStart(4, '0') + '.webp';
+        imgs[i] = im;
+      })(i);
+    }
+  }
+
+  btn.addEventListener('click', function(){
+    on = !on;
+    layer.classList.toggle('on', on);
+    media.classList.toggle('is3d', on);
+    btn.classList.toggle('on', on);
+    still.style.visibility = on ? 'hidden' : '';
+    if (ico) ico.src = on ? 'img-pdp/ic-3d-pink.svg' : 'img-v4/ic-3d.svg';
+    if (on){ ready ? draw() : preload(draw); }
+    else cancelAnimationFrame(raf);
+  });
+
+  function pxPerFrame(){
+    var w = canvas.getBoundingClientRect().width || 640;
+    return w / COUNT;
+  }
+  function step(dx){ idx = mod(idx - dx / pxPerFrame(), COUNT); draw(); }
+
+  canvas.addEventListener('pointerdown', function(e){
+    if (!ready) return;
+    dragging = true; lastX = e.clientX; vel = 0;
+    cancelAnimationFrame(raf);
+    canvas.setPointerCapture(e.pointerId);
+    e.preventDefault();
+  });
+  canvas.addEventListener('pointermove', function(e){
+    if (!dragging) return;
+    var dx = e.clientX - lastX; lastX = e.clientX; vel = dx; step(dx);
+  });
+  function release(){
+    if (!dragging) return;
+    dragging = false;
+    (function glide(){
+      vel *= 0.94;
+      if (Math.abs(vel) < 0.25) return;
+      step(vel);
+      raf = requestAnimationFrame(glide);
+    })();
+  }
+  canvas.addEventListener('pointerup', release);
+  canvas.addEventListener('pointercancel', release);
 })();
 </script>
 </body>
