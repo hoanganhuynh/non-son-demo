@@ -15,3 +15,9 @@ test('PDP home links target the deployed index page', () => {
   assert.match(html, /class="stickyhd__logo" href="index\.html"/);
   assert.doesNotMatch(html, /href="homepage-v4\.html/);
 });
+
+test('PDP model view references an image that is included in the site', () => {
+  const match = html.match(/model:'([^']+)'/);
+  assert.ok(match, 'a model-view image path is configured');
+  assert.ok(fs.existsSync(match[1]), `${match[1]} is included in the site`);
+});
