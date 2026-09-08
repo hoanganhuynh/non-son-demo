@@ -9,3 +9,9 @@ test('PDP 3D loads the cleaned production frame sequence and hides its loader', 
   assert.match(html, /\.v3d__load\[hidden\]\{display:none\}/);
   assert.match(html, /im\.src = spec\.dir \+ 'frame_' \+ String\(i \+ 1\)\.padStart\(4, '0'\) \+ '\.webp'/);
 });
+
+test('PDP home links target the deployed index page', () => {
+  assert.match(html, /class="hd__logo" href="index\.html"/);
+  assert.match(html, /class="stickyhd__logo" href="index\.html"/);
+  assert.doesNotMatch(html, /href="homepage-v4\.html/);
+});
