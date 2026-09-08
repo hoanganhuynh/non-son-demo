@@ -13,7 +13,8 @@ test('mobile 3D hero preserves the square source frame instead of stretching it'
   assert.match(html, /@media \(max-width:768px\)[\s\S]*?html\.fluid \.hero__v3d\{inset:0;width:100%;height:100%\}/);
   assert.match(html, /@media \(max-width:768px\)[\s\S]*?html\.fluid \.hero__v3d canvas\{width:auto;height:125%;aspect-ratio:1\/1;margin:-12\.5% auto 0\}/);
   assert.match(html, /@media \(max-width:768px\)[\s\S]*?html\.fluid \.hero__3dhint\{left:50%;top:32px\}/);
-  assert.match(html, /@media \(max-width:768px\)[\s\S]*?html\.fluid \.hero__pill\{left:50%;right:auto;transform:translateX\(-50%\);bottom:10px/);
+  assert.match(html, /@media \(max-width:768px\)[\s\S]*?html\.fluid \.hero__pill\{left:50%;right:auto;transform:translateX\(-50%\);bottom:24px/);
+  assert.match(html, /@media \(max-width:768px\)[\s\S]*?html\.fluid \.hero__copy\{margin-top:8px;padding-top:16px\}/);
 });
 
 test('mobile media and editorial images use stable crops', () => {
