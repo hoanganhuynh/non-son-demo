@@ -32,3 +32,14 @@ test('PDP places four related product cards before the size-help band', () => {
   assert.match(markup, /<h2[^>]*>Sản phẩm liên quan<\/h2>/);
   assert.equal((markup.match(/class="related__card"/g) || []).length, 4);
 });
+
+test('related products and the footer form their own scroll-stacking panel', () => {
+  const specsEnd = html.indexOf('</section>', html.indexOf('<section class="specs">')) + '</section>'.length;
+  const relatedPanel = html.indexOf('<div class="panel" data-panel="4">', specsEnd);
+  const related = html.indexOf('<section class="related"', specsEnd);
+  const footer = html.indexOf('<footer class="foot">', related);
+
+  assert.ok(relatedPanel > specsEnd, 'a new panel begins after product information');
+  assert.ok(related > relatedPanel, 'related products are inside the new panel');
+  assert.ok(footer > relatedPanel, 'footer remains in the related-products panel');
+});
