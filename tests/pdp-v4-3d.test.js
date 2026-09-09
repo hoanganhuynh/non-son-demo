@@ -21,3 +21,14 @@ test('PDP model view references an image that is included in the site', () => {
   assert.ok(match, 'a model-view image path is configured');
   assert.ok(fs.existsSync(match[1]), `${match[1]} is included in the site`);
 });
+
+test('PDP places four related product cards before the size-help band', () => {
+  const related = html.indexOf('<section class="related"');
+  const sizeHelp = html.indexOf('<section class="sizeband">');
+  assert.ok(related >= 0, 'related products section is present');
+  assert.ok(related < sizeHelp, 'related products appear before size help');
+
+  const markup = html.slice(related, sizeHelp);
+  assert.match(markup, /<h2[^>]*>Sản phẩm liên quan<\/h2>/);
+  assert.equal((markup.match(/class="related__card"/g) || []).length, 4);
+});

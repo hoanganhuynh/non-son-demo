@@ -186,6 +186,21 @@ main{padding-top:9px}   /* Figma: header cao 78, Main bắt đầu ở y=87 */
   line-height:18px;white-space:nowrap}
 .specs__row>p{flex:1 0 0;min-width:0;font-size:16px;color:#3f3934;line-height:1.4}
 
+/* ───────── Sản phẩm liên quan ───────── */
+.related{background:#fbfaf7;padding:112px 128px 120px}
+.related__head{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:40px}
+.related__head h2{font-size:56px;color:#121212;line-height:1.05}
+.related__grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+.related__card{position:relative;min-width:0;display:flex;flex-direction:column;gap:16px}
+.related__card>a{position:absolute;inset:0;z-index:2}
+.related__media{aspect-ratio:1/1;background:#f2f2f2;overflow:hidden}
+.related__media img{width:100%;height:100%;object-fit:contain;transition:transform .35s cubic-bezier(.22,.9,.24,1)}
+.related__card:hover .related__media img{transform:scale(1.045)}
+.related__meta{display:flex;flex-direction:column;gap:7px}
+.related__meta p{font-size:11px;color:#d11f70;letter-spacing:1.35px;text-transform:uppercase}
+.related__meta h3{font-family:Newsreader,Georgia,serif;font-weight:400;font-size:25px;color:#121212;line-height:1.08}
+.related__meta b{font-size:14px;color:#3f3934;font-weight:500}
+
 /* ───────── Band size (20:13908) ───────── */
 .sizeband{background:#d11f70;padding:32px 213px;display:flex;align-items:center;justify-content:space-between;gap:24px}
 .sizeband h2{font-family:Newsreader,Georgia,serif;font-weight:500;font-size:35.2px;color:#fff;
@@ -416,6 +431,8 @@ html.fluid .specs>*{min-width:0}
 html.fluid .specs__l p{width:100%}
 html.fluid .specs__l h2{max-width:none}
 html.fluid .specs{grid-template-rows:auto}
+html.fluid .related{padding:88px var(--pad)}
+html.fluid .related__head h2{font-size:clamp(30px,4.4vw,52px)}
 html.fluid .hl__head,html.fluid .hl__head .l{white-space:normal}
 html.fluid .hl__head .l{min-width:0}
 html.fluid .hl__head h2,html.fluid .specs__l h2{font-size:clamp(30px,4.4vw,52px)}
@@ -444,6 +461,14 @@ html.fluid .foot__top{height:auto}
   html.fluid .hl,html.fluid .specs{padding:64px var(--pad)}
   html.fluid .hl{gap:36px}
   html.fluid .specs{gap:24px}
+  html.fluid .related{padding:64px var(--pad)}
+  html.fluid .related__head{margin-bottom:28px}
+  html.fluid .related__grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:24px 12px}
+  html.fluid .related__card{gap:12px}
+  html.fluid .related__meta{gap:5px}
+  html.fluid .related__meta p{font-size:10px;letter-spacing:1px}
+  html.fluid .related__meta h3{font-size:20px;line-height:1.12}
+  html.fluid .related__meta b{font-size:13px}
   html.fluid .specs__l{padding-bottom:0;gap:16px}
   html.fluid .editorial__panel{padding:56px var(--pad);gap:36px}
   html.fluid .hl__item{flex:1 1 100%;display:grid;grid-template-columns:auto 1fr;
@@ -672,6 +697,33 @@ html.fluid .foot__top{height:auto}
       <p>COD toàn quốc, kiểm tra hàng trước khi thanh toán; guest checkout không bắt buộc tạo tài khoản.</p>
     </div>
   </dl>
+</section>
+
+<!-- ══ Sản phẩm liên quan ══ -->
+<section class="related" aria-labelledby="relatedTitle">
+  <div class="related__head"><h2 class="ns" id="relatedTitle">Sản phẩm liên quan</h2></div>
+  <div class="related__grid">
+    <article class="related__card">
+      <a href="pdp-v4.html?p=sonmai-hoanggia" aria-label="Xem Mũ Sơn Mài Hoàng Gia"></a>
+      <div class="related__media"><img src="img-v4/pr-sonmai-hoanggia.png" alt="Mũ Sơn Mài Hoàng Gia họa tiết thủ công"></div>
+      <div class="related__meta"><p>Thủ công</p><h3>Mũ Sơn Mài Hoàng Gia</h3><b>3.850.000đ</b></div>
+    </article>
+    <article class="related__card">
+      <a href="pdp-v4.html?p=raffia-sun" aria-label="Xem Nón Vành Raffia Sun"></a>
+      <div class="related__media"><img src="img-v4/pr-raffia-sun.png" alt="Nón Vành Raffia Sun màu cát"></div>
+      <div class="related__meta"><p>Nón cói</p><h3>Nón Vành Raffia Sun</h3><b>1.650.000đ</b></div>
+    </article>
+    <article class="related__card">
+      <a href="pdp-v4.html?p=classic" aria-label="Xem Mũ 3/4 Classic"></a>
+      <div class="related__media"><img src="img-v4/pr-helmet-white.png" alt="Mũ bảo hiểm 3/4 Classic màu trắng"></div>
+      <div class="related__meta"><p>Mũ bảo hiểm</p><h3>Mũ 3/4 Classic</h3><b>1.280.000đ</b></div>
+    </article>
+    <article class="related__card">
+      <a href="pdp-v4.html?p=phot-heritage" aria-label="Xem Nón Phớt Heritage"></a>
+      <div class="related__media"><img src="img-v4/pr-fedora-burgundy.png" alt="Nón Phớt Heritage màu đỏ mận"></div>
+      <div class="related__meta"><p>Nón phớt</p><h3>Nón Phớt Heritage</h3><b>2.450.000đ</b></div>
+    </article>
+  </div>
 </section>
 
 <!-- ══ Band size · 20:13908 ══ -->
